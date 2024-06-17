@@ -76,6 +76,8 @@ WSGI_APPLICATION = 'MasterBikes_Web.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
+# USAR ESTA BD PARA HACER TEST
+#
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.sqlite3',
