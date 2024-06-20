@@ -1,6 +1,7 @@
 from django.db import models
 import uuid, datetime
 from django.contrib.auth.models import AbstractBaseUser, User, UserManager, PermissionsMixin
+from PIL import Image
 
 # Create your models here.
 class CustomUserManager(UserManager):
@@ -73,14 +74,14 @@ class Bicicleta(models.Model):
     
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     nombre = models.CharField(max_length=100)
-    description = models.TextField()
-    tamanioaro = models.IntegerField(default=520)
-    suspenso = models.CharField(default='DELANTERA',max_length=9, choices=SUSPENSION)
+    descripcion = models.TextField()
+    tamanioaro = models.IntegerField(default=26)
+    suspension = models.CharField(default='DELANTERA',max_length=9, choices=SUSPENSION)
     marco = models.CharField(default='ACERO',max_length=8, choices=MARCO)
     fecha_creacion = models.DateTimeField(auto_now_add=True)
     stock = models.IntegerField(default=0)
     precio = models.IntegerField(default=0)
-    image = models.ImageField(upload_to='media/productos', null=True, blank=True)
+    imagen = models.ImageField(upload_to='static/media/productos/', null=True, blank=True)
 
 
     def __str__(self):
@@ -89,6 +90,6 @@ class Bicicleta(models.Model):
     @property
     def getImage(self):
         try:
-            return self.image.url
+            return self.imagen.url
         except:
             return ""
