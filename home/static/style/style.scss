@@ -1,0 +1,27 @@
+@import "../../../node_modules/bootstrap/scss/bootstrap.scss";
+@import "../../../node_modules/bootstrap/dist/bootswatch";
+@import "../../../node_modules/bootstrap/dist/variables";
+
+.navbar {
+    font-size: 1.15rem;    
+}
+
+.nav-link.cart {
+    width: fit-content;
+    border-radius: 5px;
+    outline: 1px solid $gray-500;
+}
+.nav-link.cart span {
+    padding: 0px 3px 0px 3px;
+    height: fit-content;
+    background-color: $gray-300;
+    color: black;
+    font-weight: 500;
+    border-radius: 1px;
+    outline: 1px solid $gray-300;
+}
+
+.banner {
+    margin: 0;
+    padding: 0;
+}
