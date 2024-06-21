@@ -13,6 +13,8 @@
         <li>Tamaño Aro: {{ bicicleta.tamanioaro }}</li>
         <li>Suspensión: {{ bicicleta.suspension }}</li>
         <li>Marco: {{ bicicleta.marco }}</li>
+        <a href="{% url 'modificarbici' bicicleta.id %}" role="button" class="btn btn-warning btn-sm text-light mx-1">Modificar</a>
+        <a href="{% url 'eliminarbici' bicicleta.id %}" role="button" class="btn btn-danger btn-sm mx-1">Eliminar</a>
         <li>------------------</li>
         {% empty %}
         <li>No hay bicicletas registradas.</li>
@@ -76,6 +78,6 @@
         <li>No hay pagos registrados.</li>
         {% endfor %}
     </ul>
-
+    <a href="{% url 'crearproducto' %}" role="button" class="btn btn-info text-light shadow rounded">Crear producto</a>
 </body>
 </html>
