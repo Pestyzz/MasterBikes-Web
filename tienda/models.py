@@ -55,8 +55,6 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 
 # Modelos de productos tienda
-
-
 class Bicicleta(models.Model):
 
     SUSPENSION = {
@@ -78,18 +76,123 @@ class Bicicleta(models.Model):
     tamanioaro = models.IntegerField(default=26)
     suspension = models.CharField(default='DELANTERA',max_length=9, choices=SUSPENSION)
     marco = models.CharField(default='ACERO',max_length=8, choices=MARCO)
-    fecha_creacion = models.DateTimeField(auto_now_add=True)
-    stock = models.IntegerField(default=0)
-    precio = models.IntegerField(default=0)
-    imagen = models.ImageField(upload_to='static/media/productos/', null=True, blank=True)
-
 
     def __str__(self):
         return self.nombre
     
-    @property
-    def getImage(self):
-        try:
-            return self.imagen.url
-        except:
-            return ""
+        
+class Servicio(models.Model):
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    nombre = models.CharField(max_length=100)
+    descripcion = models.TextField()
+
+    def __str__(self):
+        return self.nombre
+    
+        
+class Accesorio(models.Model):
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    nombre = models.CharField(max_length=100)
+    descripcion = models.TextField()
+
+    def __str__(self):
+        return self.nombre
+
+
+class Producto(models.Model):
+        
+        id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+        nombre = models.CharField(max_length=100)
+        descripcion = models.TextField()
+        bicicleta = models.ForeignKey(Bicicleta, on_delete=models.SET_NULL, null=True, blank=True)
+        servicio = models.ForeignKey(Servicio, on_delete=models.SET_NULL, null=True, blank=True)
+        accesorio = models.ForeignKey(Accesorio, on_delete=models.SET_NULL, null=True, blank=True)
+        stock = models.IntegerField(default=0)
+        precio = models.IntegerField(default=0)
+        fecha_creacion = models.DateTimeField(auto_now_add=True)
+        imagen = models.ImageField(upload_to='static/media/productos/', null=True, blank=True)
+    
+        def __str__(self):
+            return self.nombre
+        
+        @property
+        def getImage(self):
+            try:
+                return self.imagen.url
+            except:
+                return ""         
+
+
+
+
+
+
+
+
+class Boleta(models.Model):
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    cliente = models.ForeignKey(User, on_delete=models.CASCADE)
+    fecha_creacion = models.DateTimeField(auto_now_add=True)
+    estado = models.BooleanField(default=False)
+    id_transaccion = models.CharField(max_length=100, null=True)
+
+    def __str__(self):
+        return str(self.id) + '-' + self.cliente.email
+    
+class DetalleBoleta(models.Model):
+
+    boleta = models.ForeignKey(Boleta, on_delete=models.CASCADE)
+    producto = models.ForeignKey(Producto, on_delete=models.CASCADE, null=True, blank=True)
+    cantidad = models.IntegerField(default=0)
+
+    def __str__(self):
+        return str(self.boleta.id) + '-' + self.producto.name
+    
+class Delivery(models.Model):
+
+    ESTADO = {
+        "P": "PENDIENTE",
+        "E": "ENVIADO",
+        "R": "RECIBIDO",
+    }
+    
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    boleta = models.OneToOneField(Boleta, on_delete=models.CASCADE, null=True, blank=True)
+    comentarios = models.TextField(max_length=100, null=True, blank=True)
+    direccion = models.CharField(max_length=100, null=True, blank=True)
+    ciudad = models.CharField(max_length=100, null=True, blank=True)
+    region = models.CharField(max_length=100, null=True, blank=True)
+    codigo_postal = models.CharField(max_length=10, null=True, blank=True)
+    estado = models.CharField(max_length=1, choices=ESTADO, default='P')
+
+    def __str__(self):
+        return str(self.id) + '-' + self.boleta.cliente.email
+
+
+class Pago(models.Model):
+
+    ESTADO = {
+        "P": "PENDIENTE",
+        "A": "ACEPTADO",
+        "R": "RECHAZADO",
+    }
+
+    TIPO = {
+        "T": "TRANSFERENCIA",
+        "C": "CREDITO",
+        "D": "DEBITO",
+    }
+
+    estado = models.BooleanField(default=False)
+    fecha_pago = models.DateTimeField(auto_now_add=True)
+    tipo_pago = models.CharField(max_length=1, choices=TIPO)
+    boleta = models.OneToOneField(Boleta, on_delete=models.CASCADE, null=True, blank=True)
+    estado = models.CharField(max_length=1, choices=ESTADO, default='P')
+    codigo_autorizacion = models.CharField(max_length=100, null=True, blank=True)
+
+    def __str__(self):
+        return str(self.boleta.id)        
+
