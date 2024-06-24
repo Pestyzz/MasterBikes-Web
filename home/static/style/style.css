@@ -12105,6 +12105,12 @@ legend {
   border-bottom: none;
 }
 
+body {
+  padding-top: 56px;
+  height: 100vh;
+  background-color: #343a40;
+}
+
 .navbar {
   font-size: 1.15rem;
 }
@@ -12129,6 +12135,12 @@ legend {
 
 .banner {
   padding: 0;
+  -webkit-mask-image: linear-gradient(#000, rgba(0, 0, 0, 0.005));
+          mask-image: linear-gradient(#000, rgba(0, 0, 0, 0.005));
+}
+
+a.show-more {
+  color: #a4c03a;
 }
 
 .carousel-inner {
@@ -12161,6 +12173,23 @@ legend {
     display: flex;
   }
 }
+@media (max-width: 767px) {
+  .carousel-item {
+    flex: 0 0 100%;
+    display: block;
+  }
+  .carousel-inner {
+    display: block;
+  }
+  .card {
+    margin: 0 0 1em 0;
+  }
+  .carousel-control-prev,
+  .carousel-control-next {
+    width: 4vh;
+    height: 4vh;
+  }
+}
 .card .img-wrapper {
   max-width: 100%;
   height: 13em;
@@ -12177,4 +12206,16 @@ legend {
   .card .img-wrapper {
     height: 17em;
   }
+}
+a.btn-green {
+  background-color: #a4c03a;
+  border: none;
+}
+
+a.btn-green:hover {
+  background-color: #788d2a;
+}
+
+a.btn-green:active {
+  background-color: #4c5a1a !important;
 }/*# sourceMappingURL=style.css.map */
