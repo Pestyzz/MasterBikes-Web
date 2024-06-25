@@ -16,7 +16,7 @@
 <body>
     <nav class="navbar navbar-expand-lg bg-body-tertiary fixed-top">
         <div class="container">
-            <a class="navbar-brand" href="#">MasterBikes</a>
+            <a class="navbar-brand" href="{% url "home" %}">MasterBikes</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
                 aria-label="Toggle navigation">
@@ -38,9 +38,9 @@
                     </li>
                 </ul>
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0 gap-1">
-                    <form class="d-flex" role="search">
+                    <form class="d-flex" role="search" method="POST" action="{% url "finder" %}">
                         {% csrf_token %}
-                        <input class="form-control me-2" type="search" placeholder="Buscar...">
+                        <input class="form-control me-2" type="search" name="search" placeholder="Buscar...">
                     </form>
                     <li class="nav-item">
                         <a class="nav-link cart" href="#">
