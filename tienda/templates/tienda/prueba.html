@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Prueba de listas</title>
+</head>
+<body>
+    <h1>Listado de Bicicletas</h1>
+    <ul>
+        {% for bicicleta in bicicletas %}
+        <li>Nombre: {{ bicicleta.nombre }}</li>
+        <li>Descripción: {{ bicicleta.descripcion }}</li>
+        <li>Tamaño Aro: {{ bicicleta.tamanioaro }}</li>
+        <li>Suspensión: {{ bicicleta.suspension }}</li>
+        <li>Marco: {{ bicicleta.marco }}</li>
+        <a href="{% url 'modificarbici' bicicleta.id %}" role="button" class="btn btn-warning btn-sm text-light mx-1">Modificar</a>
+        <a href="{% url 'eliminarbici' bicicleta.id %}" role="button" class="btn btn-danger btn-sm mx-1">Eliminar</a>
+        <li>------------------</li>
+        {% empty %}
+        <li>No hay bicicletas registradas.</li>
+        {% endfor %}
+    </ul>
+
+    <h1>Listado de Servicios</h1>
+    <ul>
+        {% for servicio in servicios %}
+        <li>Nombre: {{ servicio.nombre }}</li>
+        <li>Descripción: {{ servicio.descripcion }}</li>
+        <li>------------------</li>
+        {% empty %}
+        <li>No hay servicios registrados.</li>
+        {% endfor %}
+    </ul>
+
+    <h1>Listado de Accesorios</h1>
+    <ul>
+        {% for accesorio in accesorios %}
+        <li>Nombre: {{ accesorio.nombre }}</li>
+        <li>Descripción: {{ accesorio.descripcion }}</li>
+        <li>------------------</li>
+        {% empty %}
+        <li>No hay accesorios registrados.</li>
+        {% endfor %}
+    </ul>
+
+    <h1>Listado de Boletas</h1>
+    <ul>
+        {% for boleta in boletas %}
+        <li>ID: {{ boleta.id }}</li>
+        <li>Cliente: {{ boleta.cliente.email }}</li>
+        <li>Estado: {{ boleta.estado }}</li>
+        <li>------------------</li>
+        {% empty %}
+        <li>No hay boletas registradas.</li>
+        {% endfor %}
+    </ul>
+
+    <h1>Listado de Deliveries</h1>
+    <ul>
+        {% for delivery in deliverys %}
+        <li>ID: {{ delivery.id }}</li>
+        <li>Cliente: {{ delivery.boleta.cliente.email }}</li>
+        <li>Estado: {{ delivery.get_estado_display }}</li>
+        <li>------------------</li>
+        {% empty %}
+        <li>No hay deliveries registrados.</li>
+        {% endfor %}
+    </ul>
+
+    <h1>Listado de Pagos</h1>
+    <ul>
+        {% for pago in pagos %}
+        <li>ID Boleta: {{ pago.boleta.id }}</li>
+        <li>Tipo de Pago: {{ pago.get_tipo_pago_display }}</li>
+        <li>Estado: {{ pago.get_estado_display }}</li>
+        <li>------------------</li>
+        {% empty %}
+        <li>No hay pagos registrados.</li>
+        {% endfor %}
+    </ul>
+    <a href="{% url 'crearproducto' %}" role="button" class="btn btn-info text-light shadow rounded">Crear producto</a>
+</body>
+</html>

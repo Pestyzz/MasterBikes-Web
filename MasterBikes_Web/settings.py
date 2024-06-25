@@ -33,7 +33,10 @@ ALLOWED_HOSTS = []
 
 # Application definition
 
+AUTH_USER_MODEL = 'tienda.User'
+
 INSTALLED_APPS = [
+    'tienda.apps.TiendaConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -78,7 +81,7 @@ WSGI_APPLICATION = 'MasterBikes_Web.wsgi.application'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
 # USAR ESTA BD PARA HACER TEST
-
+#
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -86,11 +89,11 @@ DATABASES = {
     }
 }
 
-# DATABASES = {
-#     'default': dj_database_url.config(
-#         default='postgresql://mb_admin:v75R44hrWrXulE1Xu43gZDlgJOlVFnNp@dpg-cpnl7fdds78s73b31550-a.oregon-postgres.render.com/bd_masterbikes'
-#     )
-# }
+#DATABASES = {
+#    'default': dj_database_url.config(
+#        default='postgresql://mb_admin:v75R44hrWrXulE1Xu43gZDlgJOlVFnNp@dpg-cpnl7fdds78s73b31550-a.oregon-postgres.render.com/bd_masterbikes'
+#    )
+#}
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
@@ -114,7 +117,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'es-cl'
 
 TIME_ZONE = 'UTC'
 
@@ -123,16 +126,18 @@ USE_I18N = True
 USE_TZ = True
 
 
-# Media files
 
-MEDIA_URL = '/media/'
-
-MEDIA_ROOT = os.path.join(BASE_DIR,'/media')
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'static'),
+)
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
