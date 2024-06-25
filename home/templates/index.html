@@ -11,6 +11,7 @@
 </div>
 {% endblock banner %}
 
+{% load custom_filters %}
 {% block content %}
 <main class="container py-3">
     {# SECCIÓN DE BICICLETAS #}
@@ -25,15 +26,16 @@
         <div id="carouselBikes" class="carousel">
             <div class="carousel-inner">
                 {# AÑADIR FOR BICICLETAS #}
+                {% for product in products %}
+                {% if  product.bicicleta%}
                 <div class="carousel-item">
                     <div class="card bg-body-tertiary">
-                        <div class="img-wrapper"><a href=""><img src="..." class="d-block w-100" alt="product-image"></a></div>
+                        <div class="img-wrapper"><a href=""><img src="{{product.imagen.url}}" class="d-block w-100" alt="product-image"></a></div>
                         <div class="card-body text-body">
-                            <h5 class="card-title">Card title 1</h5>
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                                card's content.</p>
+                            <h5 class="card-title">{{product.nombre}}</h5>
+                            <p class="card-text">{{product.descripcion}}</p>
                             <div class="d-flex justify-content-between align-items-center">
-                                <h5 class="m-0">$0</h5>
+                                <h5 class="m-0">{{product.precio|currency_format}}</h5>
                                 <a href="" class="btn btn-green fw-semibold text-dark">
                                     <i class="fas fa-cart-plus fa-lg"></i>
                                     Añadir Al Carro
@@ -42,142 +44,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="carousel-item">
-                    <div class="card bg-body-tertiary">
-                        <div class="img-wrapper"><a href=""><img src="..." class="d-block w-100" alt="product-image"></a></div>
-                        <div class="card-body text-body">
-                            <h5 class="card-title">Card title 2</h5>
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                                card's content.</p>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <h5 class="m-0">$0</h5>
-                                <a href="" class="btn btn-green fw-semibold text-dark">
-                                    <i class="fas fa-cart-plus fa-lg"></i>
-                                    Añadir Al Carro
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="carousel-item">
-                    <div class="card bg-body-tertiary">
-                        <div class="img-wrapper"><a href=""><img src="..." class="d-block w-100" alt="product-image"></a></div>
-                        <div class="card-body text-body">
-                            <h5 class="card-title">Card title 3</h5>
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                                card's content.</p>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <h5 class="m-0">$0</h5>
-                                <a href="" class="btn btn-green fw-semibold text-dark">
-                                    <i class="fas fa-cart-plus fa-lg"></i>
-                                    Añadir Al Carro
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="carousel-item">
-                    <div class="card bg-body-tertiary">
-                        <div class="img-wrapper"><a href=""><img src="..." class="d-block w-100" alt="product-image"></a></div>
-                        <div class="card-body text-body">
-                            <h5 class="card-title">Card title 4</h5>
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                                card's content.</p>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <h5 class="m-0">$0</h5>
-                                <a href="" class="btn btn-green fw-semibold text-dark">
-                                    <i class="fas fa-cart-plus fa-lg"></i>
-                                    Añadir Al Carro
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="carousel-item">
-                    <div class="card bg-body-tertiary">
-                        <div class="img-wrapper"><a href=""><img src="..." class="d-block w-100" alt="product-image"></a></div>
-                        <div class="card-body text-body">
-                            <h5 class="card-title">Card title 5</h5>
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                                card's content.</p>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <h5 class="m-0">$0</h5>
-                                <a href="" class="btn btn-green fw-semibold text-dark">
-                                    <i class="fas fa-cart-plus fa-lg"></i>
-                                    Añadir Al Carro
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="carousel-item">
-                    <div class="card bg-body-tertiary">
-                        <div class="img-wrapper"><a href=""><img src="..." class="d-block w-100" alt="product-image"></a></div>
-                        <div class="card-body text-body">
-                            <h5 class="card-title">Card title 6</h5>
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                                card's content.</p>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <h5 class="m-0">$0</h5>
-                                <a href="" class="btn btn-green fw-semibold text-dark">
-                                    <i class="fas fa-cart-plus fa-lg"></i>
-                                    Añadir Al Carro
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="carousel-item">
-                    <div class="card bg-body-tertiary">
-                        <div class="img-wrapper"><a href=""><img src="..." class="d-block w-100" alt="product-image"></a></div>
-                        <div class="card-body text-body">
-                            <h5 class="card-title">Card title 7</h5>
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                                card's content.</p>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <h5 class="m-0">$0</h5>
-                                <a href="" class="btn btn-green fw-semibold text-dark">
-                                    <i class="fas fa-cart-plus fa-lg"></i>
-                                    Añadir Al Carro
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="carousel-item">
-                    <div class="card bg-body-tertiary">
-                        <div class="img-wrapper"><a href=""><img src="..." class="d-block w-100" alt="product-image"></a></div>
-                        <div class="card-body text-body">
-                            <h5 class="card-title">Card title 8</h5>
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                                card's content.</p>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <h5 class="m-0">$0</h5>
-                                <a href="" class="btn btn-green fw-semibold text-dark">
-                                    <i class="fas fa-cart-plus fa-lg"></i>
-                                    Añadir Al Carro
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="carousel-item">
-                    <div class="card bg-body-tertiary">
-                        <div class="img-wrapper"><a href=""><img src="..." class="d-block w-100" alt="product-image"></a></div>
-                        <div class="card-body text-body">
-                            <h5 class="card-title">Card title 9</h5>
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                                card's content.</p>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <h5 class="m-0">$0</h5>
-                                <a href="" class="btn btn-green fw-semibold text-dark">
-                                    <i class="fas fa-cart-plus fa-lg"></i>
-                                    Añadir Al Carro
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                {% endif %}
+                {% endfor %}
             </div>
             <button class="carousel-control-prev" type="button" data-bs-target="#carouselBikes" data-bs-slide="prev">
                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -202,15 +70,16 @@
         <div id="carouselAccesories" class="carousel">
             <div class="carousel-inner">
                 {# AÑADIR FOR BICICLETAS #}
+                {% for product in products %}
+                {% if  product.accesorio%}
                 <div class="carousel-item">
                     <div class="card bg-body-tertiary">
-                        <div class="img-wrapper"><a href=""><img src="..." class="d-block w-100" alt="product-image"></a></div>
+                        <div class="img-wrapper"><a href=""><img src="{{product.imagen.url}}" class="d-block w-100" alt="product-image"></a></div>
                         <div class="card-body text-body">
-                            <h5 class="card-title">Card title 1</h5>
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                                card's content.</p>
+                            <h5 class="card-title">{{product.nombre}}</h5>
+                            <p class="card-text">{{product.descripcion}}</p>
                             <div class="d-flex justify-content-between align-items-center">
-                                <h5 class="m-0">$0</h5>
+                                <h5 class="m-0">{{product.precio|currency_format}}</h5>
                                 <a href="" class="btn btn-green fw-semibold text-dark">
                                     <i class="fas fa-cart-plus fa-lg"></i>
                                     Añadir Al Carro
@@ -219,142 +88,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="carousel-item">
-                    <div class="card bg-body-tertiary">
-                        <div class="img-wrapper"><a href=""><img src="..." class="d-block w-100" alt="product-image"></a></div>
-                        <div class="card-body text-body">
-                            <h5 class="card-title">Card title 2</h5>
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                                card's content.</p>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <h5 class="m-0">$0</h5>
-                                <a href="" class="btn btn-green fw-semibold text-dark">
-                                    <i class="fas fa-cart-plus fa-lg"></i>
-                                    Añadir Al Carro
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="carousel-item">
-                    <div class="card bg-body-tertiary">
-                        <div class="img-wrapper"><a href=""><img src="..." class="d-block w-100" alt="product-image"></a></div>
-                        <div class="card-body text-body">
-                            <h5 class="card-title">Card title 3</h5>
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                                card's content.</p>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <h5 class="m-0">$0</h5>
-                                <a href="" class="btn btn-green fw-semibold text-dark">
-                                    <i class="fas fa-cart-plus fa-lg"></i>
-                                    Añadir Al Carro
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="carousel-item">
-                    <div class="card bg-body-tertiary">
-                        <div class="img-wrapper"><a href=""><img src="..." class="d-block w-100" alt="product-image"></a></div>
-                        <div class="card-body text-body">
-                            <h5 class="card-title">Card title 4</h5>
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                                card's content.</p>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <h5 class="m-0">$0</h5>
-                                <a href="" class="btn btn-green fw-semibold text-dark">
-                                    <i class="fas fa-cart-plus fa-lg"></i>
-                                    Añadir Al Carro
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="carousel-item">
-                    <div class="card bg-body-tertiary">
-                        <div class="img-wrapper"><a href=""><img src="..." class="d-block w-100" alt="product-image"></a></div>
-                        <div class="card-body text-body">
-                            <h5 class="card-title">Card title 5</h5>
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                                card's content.</p>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <h5 class="m-0">$0</h5>
-                                <a href="" class="btn btn-green fw-semibold text-dark">
-                                    <i class="fas fa-cart-plus fa-lg"></i>
-                                    Añadir Al Carro
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="carousel-item">
-                    <div class="card bg-body-tertiary">
-                        <div class="img-wrapper"><a href=""><img src="..." class="d-block w-100" alt="product-image"></a></div>
-                        <div class="card-body text-body">
-                            <h5 class="card-title">Card title 6</h5>
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                                card's content.</p>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <h5 class="m-0">$0</h5>
-                                <a href="" class="btn btn-green fw-semibold text-dark">
-                                    <i class="fas fa-cart-plus fa-lg"></i>
-                                    Añadir Al Carro
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="carousel-item">
-                    <div class="card bg-body-tertiary">
-                        <div class="img-wrapper"><a href=""><img src="..." class="d-block w-100" alt="product-image"></a></div>
-                        <div class="card-body text-body">
-                            <h5 class="card-title">Card title 7</h5>
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                                card's content.</p>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <h5 class="m-0">$0</h5>
-                                <a href="" class="btn btn-green fw-semibold text-dark">
-                                    <i class="fas fa-cart-plus fa-lg"></i>
-                                    Añadir Al Carro
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="carousel-item">
-                    <div class="card bg-body-tertiary">
-                        <div class="img-wrapper"><a href=""><img src="..." class="d-block w-100" alt="product-image"></a></div>
-                        <div class="card-body text-body">
-                            <h5 class="card-title">Card title 8</h5>
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                                card's content.</p>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <h5 class="m-0">$0</h5>
-                                <a href="" class="btn btn-green fw-semibold text-dark">
-                                    <i class="fas fa-cart-plus fa-lg"></i>
-                                    Añadir Al Carro
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="carousel-item">
-                    <div class="card bg-body-tertiary">
-                        <div class="img-wrapper"><a href=""><img src="..." class="d-block w-100" alt="product-image"></a></div>
-                        <div class="card-body text-body">
-                            <h5 class="card-title">Card title 9</h5>
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                                card's content.</p>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <h5 class="m-0">$0</h5>
-                                <a href="" class="btn btn-green fw-semibold text-dark">
-                                    <i class="fas fa-cart-plus fa-lg"></i>
-                                    Añadir Al Carro
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                {% endif %}
+                {% endfor %}
             </div>
             <button class="carousel-control-prev" type="button" data-bs-target="#carouselAccesories" data-bs-slide="prev">
                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -379,15 +114,16 @@
         <div id="carouselServices" class="carousel">
             <div class="carousel-inner">
                 {# AÑADIR FOR BICICLETAS #}
+                {% for product in products %}
+                {% if  product.servicio%}
                 <div class="carousel-item">
                     <div class="card bg-body-tertiary">
-                        <div class="img-wrapper"><a href=""><img src="..." class="d-block w-100" alt="product-image"></a></div>
+                        <div class="img-wrapper"><a href=""><img src="{{product.imagen.url}}" class="d-block w-100" alt="product-image"></a></div>
                         <div class="card-body text-body">
-                            <h5 class="card-title">Card title 1</h5>
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                                card's content.</p>
+                            <h5 class="card-title">{{product.nombre}}</h5>
+                            <p class="card-text">{{product.descripcion}}</p>
                             <div class="d-flex justify-content-between align-items-center">
-                                <h5 class="m-0">$0</h5>
+                                <h5 class="m-0">{{product.precio|currency_format}}</h5>
                                 <a href="" class="btn btn-green fw-semibold text-dark">
                                     <i class="fas fa-cart-plus fa-lg"></i>
                                     Añadir Al Carro
@@ -396,142 +132,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="carousel-item">
-                    <div class="card bg-body-tertiary">
-                        <div class="img-wrapper"><a href=""><img src="..." class="d-block w-100" alt="product-image"></a></div>
-                        <div class="card-body text-body">
-                            <h5 class="card-title">Card title 2</h5>
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                                card's content.</p>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <h5 class="m-0">$0</h5>
-                                <a href="" class="btn btn-green fw-semibold text-dark">
-                                    <i class="fas fa-cart-plus fa-lg"></i>
-                                    Añadir Al Carro
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="carousel-item">
-                    <div class="card bg-body-tertiary">
-                        <div class="img-wrapper"><a href=""><img src="..." class="d-block w-100" alt="product-image"></a></div>
-                        <div class="card-body text-body">
-                            <h5 class="card-title">Card title 3</h5>
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                                card's content.</p>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <h5 class="m-0">$0</h5>
-                                <a href="" class="btn btn-green fw-semibold text-dark">
-                                    <i class="fas fa-cart-plus fa-lg"></i>
-                                    Añadir Al Carro
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="carousel-item">
-                    <div class="card bg-body-tertiary">
-                        <div class="img-wrapper"><a href=""><img src="..." class="d-block w-100" alt="product-image"></a></div>
-                        <div class="card-body text-body">
-                            <h5 class="card-title">Card title 4</h5>
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                                card's content.</p>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <h5 class="m-0">$0</h5>
-                                <a href="" class="btn btn-green fw-semibold text-dark">
-                                    <i class="fas fa-cart-plus fa-lg"></i>
-                                    Añadir Al Carro
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="carousel-item">
-                    <div class="card bg-body-tertiary">
-                        <div class="img-wrapper"><a href=""><img src="..." class="d-block w-100" alt="product-image"></a></div>
-                        <div class="card-body text-body">
-                            <h5 class="card-title">Card title 5</h5>
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                                card's content.</p>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <h5 class="m-0">$0</h5>
-                                <a href="" class="btn btn-green fw-semibold text-dark">
-                                    <i class="fas fa-cart-plus fa-lg"></i>
-                                    Añadir Al Carro
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="carousel-item">
-                    <div class="card bg-body-tertiary">
-                        <div class="img-wrapper"><a href=""><img src="..." class="d-block w-100" alt="product-image"></a></div>
-                        <div class="card-body text-body">
-                            <h5 class="card-title">Card title 6</h5>
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                                card's content.</p>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <h5 class="m-0">$0</h5>
-                                <a href="" class="btn btn-green fw-semibold text-dark">
-                                    <i class="fas fa-cart-plus fa-lg"></i>
-                                    Añadir Al Carro
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="carousel-item">
-                    <div class="card bg-body-tertiary">
-                        <div class="img-wrapper"><a href=""><img src="..." class="d-block w-100" alt="product-image"></a></div>
-                        <div class="card-body text-body">
-                            <h5 class="card-title">Card title 7</h5>
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                                card's content.</p>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <h5 class="m-0">$0</h5>
-                                <a href="" class="btn btn-green fw-semibold text-dark">
-                                    <i class="fas fa-cart-plus fa-lg"></i>
-                                    Añadir Al Carro
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="carousel-item">
-                    <div class="card bg-body-tertiary">
-                        <div class="img-wrapper"><a href=""><img src="..." class="d-block w-100" alt="product-image"></a></div>
-                        <div class="card-body text-body">
-                            <h5 class="card-title">Card title 8</h5>
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                                card's content.</p>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <h5 class="m-0">$0</h5>
-                                <a href="" class="btn btn-green fw-semibold text-dark">
-                                    <i class="fas fa-cart-plus fa-lg"></i>
-                                    Añadir Al Carro
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="carousel-item">
-                    <div class="card bg-body-tertiary">
-                        <div class="img-wrapper"><a href=""><img src="..." class="d-block w-100" alt="product-image"></a></div>
-                        <div class="card-body text-body">
-                            <h5 class="card-title">Card title 9</h5>
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                                card's content.</p>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <h5 class="m-0">$0</h5>
-                                <a href="" class="btn btn-green fw-semibold text-dark">
-                                    <i class="fas fa-cart-plus fa-lg"></i>
-                                    Añadir Al Carro
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                {% endif %}
+                {% endfor %}
             </div>
             <button class="carousel-control-prev" type="button" data-bs-target="#carouselServices" data-bs-slide="prev">
                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>

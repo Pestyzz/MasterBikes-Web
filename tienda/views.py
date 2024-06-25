@@ -12,6 +12,9 @@ def lista_servicio():
 def lista_accesorio():
     return Accesorio.objects.all()
 
+def lista_producto():
+    return Producto.objects.all()
+
 def lista_boleta():
     return Boleta.objects.all()
 
@@ -27,6 +30,7 @@ def prueba(request):
     bicicletas = lista_bicicleta()
     servicios = lista_servicio()
     accesorios = lista_accesorio()
+    productos = lista_producto()
     boletas = lista_boleta()
     deliverys = lista_delivery()
     pagos = lista_pago()
@@ -35,6 +39,7 @@ def prueba(request):
         'bicicletas': bicicletas,
         'servicios': servicios,
         'accesorios': accesorios,
+        'productos': productos,
         'boletas': boletas,
         'deliverys': deliverys,
         'pagos': pagos,

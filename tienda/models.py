@@ -1,33 +1,37 @@
 from django.db import models
-import uuid, datetime
+import uuid
+import datetime
 from django.contrib.auth.models import AbstractBaseUser, User, UserManager, PermissionsMixin
 from PIL import Image
 
 # Create your models here.
+
+
 class CustomUserManager(UserManager):
 
     def _create_user(self, email, password, **extra_fields):
         if not email:
             raise ValueError('The Email field must be set')
-        
+
         email = self.normalize_email(email)
         user = self.model(email=email, **extra_fields)
         user.set_password(password)
         user.save(using=self._db)
         return user
-    
+
     def create_user(self, email=None, password=None, **extra_fields):
 
         extra_fields.setdefault('is_staff', False)
         extra_fields.setdefault('is_superuser', False)
         return self._create_user(email, password, **extra_fields)
-    
+
     def create_superuser(self, email=None, password=None, **extra_fields):
 
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
         return self._create_user(email, password, **extra_fields)
-    
+
+
 class User(AbstractBaseUser, PermissionsMixin):
 
     email = models.EmailField(unique=True)
@@ -51,7 +55,6 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def get_full_name(self):
         return f'{self.first_name} {self.last_name}'
-		
 
 
 # Modelos de productos tienda
@@ -62,25 +65,24 @@ class Bicicleta(models.Model):
         "TRASERA": "TRASERA",
         "DOBLE": "DOBLE",
     }
-    
+
     MARCO = {
         "ACERO": "ACERO",
         "ALUMINIO": "ALUMINIO",
         "CARBON": "CARBON",
-    }    
+    }
 
-    
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     nombre = models.CharField(max_length=100)
     descripcion = models.TextField()
     tamanioaro = models.IntegerField(default=26)
-    suspension = models.CharField(default='DELANTERA',max_length=9, choices=SUSPENSION)
-    marco = models.CharField(default='ACERO',max_length=8, choices=MARCO)
+    suspension = models.CharField(default='DELANTERA', max_length=9, choices=SUSPENSION)
+    marco = models.CharField(default='ACERO', max_length=8, choices=MARCO)
 
     def __str__(self):
         return self.nombre
-    
-        
+
+
 class Servicio(models.Model):
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -89,56 +91,50 @@ class Servicio(models.Model):
 
     def __str__(self):
         return self.nombre
-    
-        
+
+
 class Accesorio(models.Model):
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     nombre = models.CharField(max_length=100)
     descripcion = models.TextField()
 
+    def __str__(self):
+        return self.nombre
+
+
+class Marca(models.Model):
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    nombre = models.CharField(max_length=100)
 
     def __str__(self):
         return self.nombre
-    
-class Marca(models.Model):
-        
-        id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-        nombre = models.CharField(max_length=100)
-    
-        def __str__(self):
-            return self.nombre    
 
 
 class Producto(models.Model):
-        
-        id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-        nombre = models.CharField(max_length=100)
-        descripcion = models.TextField()
-        bicicleta = models.ForeignKey(Bicicleta, on_delete=models.SET_NULL, null=True, blank=True)
-        servicio = models.ForeignKey(Servicio, on_delete=models.SET_NULL, null=True, blank=True)
-        accesorio = models.ForeignKey(Accesorio, on_delete=models.SET_NULL, null=True, blank=True)
-        marca = models.ForeignKey(Marca, on_delete=models.SET_NULL, null=True, blank=True)
-        stock = models.IntegerField(default=0)
-        precio = models.IntegerField(default=0)
-        fecha_creacion = models.DateTimeField(auto_now_add=True)
-        imagen = models.ImageField(upload_to='static/media/productos/', null=True, blank=True)
-    
-        def __str__(self):
-            return self.nombre
-        
-        @property
-        def getImage(self):
-            try:
-                return self.imagen.url
-            except:
-                return ""         
 
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    nombre = models.CharField(max_length=100)
+    descripcion = models.TextField()
+    bicicleta = models.ForeignKey(Bicicleta, on_delete=models.SET_NULL, null=True, blank=True)
+    servicio = models.ForeignKey(Servicio, on_delete=models.SET_NULL, null=True, blank=True)
+    accesorio = models.ForeignKey(Accesorio, on_delete=models.SET_NULL, null=True, blank=True)
+    marca = models.ForeignKey(Marca, on_delete=models.SET_NULL, null=True, blank=True)
+    stock = models.IntegerField(default=0)
+    precio = models.IntegerField(default=0)
+    fecha_creacion = models.DateTimeField(auto_now_add=True)
+    imagen = models.ImageField(upload_to='static/media/productos/', null=True, blank=True)
 
+    def __str__(self):
+        return self.nombre
 
-
-
-
+    @property
+    def getImage(self):
+        try:
+            return self.imagen.url
+        except:
+            return ""
 
 
 class Boleta(models.Model):
@@ -151,7 +147,8 @@ class Boleta(models.Model):
 
     def __str__(self):
         return str(self.id) + '-' + self.cliente.email
-    
+
+
 class DetalleBoleta(models.Model):
 
     boleta = models.ForeignKey(Boleta, on_delete=models.CASCADE)
@@ -160,7 +157,8 @@ class DetalleBoleta(models.Model):
 
     def __str__(self):
         return str(self.boleta.id) + '-' + self.producto.name
-    
+
+
 class Delivery(models.Model):
 
     ESTADO = {
@@ -168,7 +166,7 @@ class Delivery(models.Model):
         "E": "ENVIADO",
         "R": "RECIBIDO",
     }
-    
+
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     boleta = models.OneToOneField(Boleta, on_delete=models.CASCADE, null=True, blank=True)
     comentarios = models.TextField(max_length=100, null=True, blank=True)
@@ -204,5 +202,4 @@ class Pago(models.Model):
     codigo_autorizacion = models.CharField(max_length=100, null=True, blank=True)
 
     def __str__(self):
-        return str(self.boleta.id)        
-
+        return str(self.boleta.id)
