@@ -97,8 +97,17 @@ class Accesorio(models.Model):
     nombre = models.CharField(max_length=100)
     descripcion = models.TextField()
 
+
     def __str__(self):
         return self.nombre
+    
+class Marca(models.Model):
+        
+        id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+        nombre = models.CharField(max_length=100)
+    
+        def __str__(self):
+            return self.nombre    
 
 
 class Producto(models.Model):
@@ -109,6 +118,7 @@ class Producto(models.Model):
         bicicleta = models.ForeignKey(Bicicleta, on_delete=models.SET_NULL, null=True, blank=True)
         servicio = models.ForeignKey(Servicio, on_delete=models.SET_NULL, null=True, blank=True)
         accesorio = models.ForeignKey(Accesorio, on_delete=models.SET_NULL, null=True, blank=True)
+        marca = models.ForeignKey(Marca, on_delete=models.SET_NULL, null=True, blank=True)
         stock = models.IntegerField(default=0)
         precio = models.IntegerField(default=0)
         fecha_creacion = models.DateTimeField(auto_now_add=True)
