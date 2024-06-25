@@ -7,12 +7,10 @@ def home(request):
 
 def finder(request):
     if request.method == "GET":
-        return render(request, 'finder.html')
-    else:
-        searchQuery = request.POST.get("search")
+        searchQuery = request.GET.get("search")
         
         data = {
             "search": searchQuery
         }
-        print(request.POST)
+        print(request.GET)
         return render(request, 'finder.html', data)
