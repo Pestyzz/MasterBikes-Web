@@ -1,0 +1,9 @@
+@import "../../../node_modules/bootstrap/scss/bootstrap.scss";
+@import "../../../node_modules/bootstrap/dist/bootswatch";
+@import "../../../node_modules/bootstrap/dist/variables";
+
+img.p-image {
+    height: 480px;
+    margin: 8px;
+    padding: 12px 0px 12px 0px;
+}

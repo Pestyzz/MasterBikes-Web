@@ -30,15 +30,15 @@
                 {% if  product.bicicleta%}
                 <div class="carousel-item">
                     <div class="card bg-body-tertiary">
-                        <div class="img-wrapper"><a href=""><img src="{{product.imagen.url}}" class="d-block w-100" alt="product-image"></a></div>
+                        <div class="img-wrapper"><a href="{% url "product" product.id %}"><img src="{{product.imagen.url}}" class="w-100" alt="product-image"></a></div>
                         <div class="card-body text-body">
-                            <h5 class="card-title">{{product.nombre}}</h5>
-                            <p class="card-text">{{product.descripcion}}</p>
+                            <p class="card-title">{{product.marca.nombre}}</p>
+                            <h5 class="card-text">{{product.nombre}}</h5>
                             <div class="d-flex justify-content-between align-items-center">
                                 <h5 class="m-0">{{product.precio|currency_format}}</h5>
                                 <a href="" class="btn btn-green fw-semibold text-dark">
                                     <i class="fas fa-cart-plus fa-lg"></i>
-                                    Añadir Al Carro
+                                    Añadir al carro
                                 </a>
                             </div>
                         </div>
@@ -69,20 +69,20 @@
         </div>
         <div id="carouselAccesories" class="carousel">
             <div class="carousel-inner">
-                {# AÑADIR FOR BICICLETAS #}
+                {# AÑADIR FOR ACCESORIOS #}
                 {% for product in products %}
                 {% if  product.accesorio%}
                 <div class="carousel-item">
                     <div class="card bg-body-tertiary">
-                        <div class="img-wrapper"><a href=""><img src="{{product.imagen.url}}" class="d-block w-100" alt="product-image"></a></div>
+                        <div class="img-wrapper"><a href="{% url "product" product.id %}"><img src="{{product.imagen.url}}" class="w-100" alt="product-image"></a></div>
                         <div class="card-body text-body">
-                            <h5 class="card-title">{{product.nombre}}</h5>
-                            <p class="card-text">{{product.descripcion}}</p>
+                            <p class="card-title">{{product.marca.nombre}}</p>
+                            <h5 class="card-text">{{product.nombre}}</h5>
                             <div class="d-flex justify-content-between align-items-center">
                                 <h5 class="m-0">{{product.precio|currency_format}}</h5>
                                 <a href="" class="btn btn-green fw-semibold text-dark">
                                     <i class="fas fa-cart-plus fa-lg"></i>
-                                    Añadir Al Carro
+                                    Añadir al carro
                                 </a>
                             </div>
                         </div>
@@ -113,20 +113,20 @@
         </div>
         <div id="carouselServices" class="carousel">
             <div class="carousel-inner">
-                {# AÑADIR FOR BICICLETAS #}
+                {# AÑADIR FOR SERVICIOS #}
                 {% for product in products %}
                 {% if  product.servicio%}
                 <div class="carousel-item">
                     <div class="card bg-body-tertiary">
-                        <div class="img-wrapper"><a href=""><img src="{{product.imagen.url}}" class="d-block w-100" alt="product-image"></a></div>
+                        <div class="img-wrapper"><a href="{% url "product" product.id %}"><img src="{{product.imagen.url}}" class="w-100" alt="product-image"></a></div>
                         <div class="card-body text-body">
-                            <h5 class="card-title">{{product.nombre}}</h5>
-                            <p class="card-text">{{product.descripcion}}</p>
+                            <p class="card-title">{{product.marca.nombre}}</p>
+                            <h5 class="card-text">{{product.nombre}}</h5>
                             <div class="d-flex justify-content-between align-items-center">
                                 <h5 class="m-0">{{product.precio|currency_format}}</h5>
                                 <a href="" class="btn btn-green fw-semibold text-dark">
                                     <i class="fas fa-cart-plus fa-lg"></i>
-                                    Añadir Al Carro
+                                    Añadir al carro
                                 </a>
                             </div>
                         </div>

@@ -23,11 +23,7 @@ def finder(request, category=None):
             products = Producto.objects.filter(accesorio__isnull=False, nombre__icontains=searchQuery)
         elif category == "Servicios":
             products = Producto.objects.filter(servicio__isnull=False, nombre__icontains=searchQuery)
-        elif category == "Arriendos":
-            products = Producto.objects.filter(servicio__nombre="Arriendo")
-        elif category == "Reparaciones":
-            products = Producto.objects.filter(servicio__nombre="Reparación")
-        elif category == None:
+        else:
             products = Producto.objects.filter(nombre__icontains=searchQuery)
         
         data = {
@@ -38,5 +34,6 @@ def finder(request, category=None):
 
         return render(request, "finder.html", data)
     
-def productView(request):
-    return render(request, "product.html")
+def productView(request, id):
+    product = get_object_or_404(Producto, id = id)
+    return render(request, "product.html", {"product": product})
