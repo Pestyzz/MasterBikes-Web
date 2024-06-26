@@ -18,7 +18,7 @@
     <div class="d-flex flex-column justify-content-center w-100 mb-2">
         <div class="mt-4 mb-3 align-items-center text-start">
             {% if category != None %}
-            <h4 class="fw-bold text-body s-query">{{products|length}} {% if products|length != 1 %} Resultados{% else %} Resultado{% endif %} de {{category}}.</h4>
+            <h4 class="fw-bold text-body s-query">{{products|length}}{% if products|length != 1 %} Resultados{% else %} Resultado{% endif %} de {{category}}.</h4>
             {% else %}
             <h4 class="fw-bold text-body s-query">{{products|length}}{% if products|length != 1 %} Resultados{% else %} Resultado{% endif %} para "{{searchQ}}".</h4>
             {% endif %} 

@@ -3,29 +3,34 @@
 {% load static %}
 {% block scripts %}
 <script src="{% static "js/stock.js" %}"></script>
+<script src="{% static "js/productZoom.js" %}"></script>
 {% endblock scripts %}
 
 {% load custom_filters %}
 {% block content %}
 <main class="container mt-4 bg-dark">
     <div class="row">
-        <div class="col-6 img-wrapper p-3">
-            <img class="w-100 p-image" src="{{product.imagen.url}}" alt="product-image">
+        <div class="col-6 p-3 ps-4">
+            <div class="image-container">
+                <img class="w-100" src="{{product.imagen.url}}" alt="product-image">
+            </div>
         </div>
         <div class="col-6 d-flex flex-column mt-3">
             <div class="w-100 flex-grow-1">
                 <h3 class="fw-light">{{product.marca.nombre}}</h3>
                 {% if product.bicicleta %}
                 <h3 class="fw-bolder">BICICLETA {{product.bicicleta.tipobicicleta}} {{product.nombre}} ARO {{product.bicicleta.tamanioaro}} SUSPENSION {{product.bicicleta.suspension}} MARCO {{product.bicicleta.marco}}</h3>
-                {% else %}
-                <h3 class="fw-bolder">{{product.nombre}}</h3>
+                {% elif product.accesorio %}
+                <h3 class="fw-bolder">{{product.accesorio.tipoaccesorio}} {{product.nombre}}</h3>
                 {% endif %}
-                <h4>{{product.precio|currency_format}}</h4>
-                <h5 class="fw-light">Stock: {{product.stock}}</h5>
-                <h5>Descripción</h5>
+                <h4 class="fw-normal">{{product.precio|currency_format}}</h4>
+                {% if product.bicicleta or product.accesorio %}
+                <h5 class="fw-light">Stock: {{product.stock}} unidades</h5>
+                {% endif %}
+                <h5 class="mt-4">Descripción:</h5>
                 <p>{{product.descripcion}}</p>
             </div>
-            <div class="mb-3">
+            <div class="mb-5">
                 <div class="d-flex justify-content-center gap-lg-3">
                     <div class="number-input" data-stock="{{product.stock}}">
                         <button id="decrement" class="decrement">-</button>
@@ -40,8 +45,21 @@
             </div>
         </div>
     </div>
-    <div class="row mt-2">
-        
+    {% if product.bicicleta or product.accesorio %}
+    <div class="row mt-2 d-flex justify-content-center">
+        <div class="col-12 text-center border-top w-75">
+            {% if product.bicicleta %}
+            <h4 class="mt-1">Especificaciones:</h4>
+            <p class="mt-3 mb-3 fw-bold">Aro: <span class="fw-normal">{{product.bicicleta.tamanioaro}}</span></p>
+            <p class="mb-3 fw-bold">Suspensión: <span class="fw-normal">{{product.bicicleta.suspension}}</span></p>
+            <p class="mb-3 fw-bold">Marco: <span class="fw-normal">{{product.bicicleta.marco}}</span></p>
+            <p class="mb-3 fw-bold">Tipo de Bicicleta: <span class="fw-normal">{{product.bicicleta.tipobicicleta}}</span></p>
+            {% else%}
+            <h4 class="mt-1">Especificaciones</h4>
+            <p class="mb-3 fw-bold">Tipo de Accesorio: <span class="fw-normal">{{product.accesorio.tipoaccesorio}}</span></p>
+            {% endif %}
+        </div>
     </div>
+    {% endif %}
 </main>
 {% endblock content %}
