@@ -74,7 +74,6 @@ class Bicicleta(models.Model):
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     nombre = models.CharField(max_length=100)
-    descripcion = models.TextField()
     tamanioaro = models.IntegerField(default=26)
     suspension = models.CharField(default='DELANTERA', max_length=9, choices=SUSPENSION)
     marco = models.CharField(default='ACERO', max_length=8, choices=MARCO)
@@ -87,7 +86,6 @@ class Servicio(models.Model):
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     nombre = models.CharField(max_length=100)
-    descripcion = models.TextField()
 
     def __str__(self):
         return self.nombre
@@ -97,7 +95,6 @@ class Accesorio(models.Model):
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     nombre = models.CharField(max_length=100)
-    descripcion = models.TextField()
 
     def __str__(self):
         return self.nombre
@@ -124,7 +121,7 @@ class Producto(models.Model):
     stock = models.IntegerField(default=0)
     precio = models.IntegerField(default=0)
     fecha_creacion = models.DateTimeField(auto_now_add=True)
-    imagen = models.ImageField(upload_to='static/media/productos/', null=True, blank=True)
+    imagen = models.ImageField(upload_to='static/media/productos/', null=False, blank=True)
 
     def __str__(self):
         return self.nombre

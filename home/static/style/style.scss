@@ -59,6 +59,7 @@ a.show-more {
     margin: 0 0.5em;
     box-shadow: 2px 6px 8px 0 rgba(22, 22, 26, 0.18);
     border: none;
+    height: 340px;
 }
 
 .carousel-control-prev,
@@ -123,15 +124,6 @@ a.show-more {
         height: 17em;
     }
 }
-
-// .card-body a {
-//     position: relative;
-//     display: none;
-// }
-
-// .card-body:hover a{
-//     display: inline;
-// }
 
 a.btn-green {
     background-color: $green2;

@@ -8,16 +8,35 @@ def product_list():
 
 def home(request):
     products = product_list()
-    print(products)
-    
+
     return render(request, "index.html", {"products": products})
 
-def finder(request):
+def finder(request, category=None):
+    products = None
+    
     if request.method == "GET":
-        searchQuery = request.GET.get("search")
+        searchQuery = request.GET.get("search", "")
+        
+        if category == "Bicicletas":
+            products = Producto.objects.filter(bicicleta__isnull=False, nombre__icontains=searchQuery)
+        elif category == "Accesorios":
+            products = Producto.objects.filter(accesorio__isnull=False, nombre__icontains=searchQuery)
+        elif category == "Servicios":
+            products = Producto.objects.filter(servicio__isnull=False, nombre__icontains=searchQuery)
+        elif category == "Arriendos":
+            products = Producto.objects.filter(servicio__nombre="Arriendo")
+        elif category == "Reparaciones":
+            products = Producto.objects.filter(servicio__nombre="Reparación")
+        elif category == None:
+            products = Producto.objects.filter(nombre__icontains=searchQuery)
         
         data = {
-            "search": searchQuery
+            "searchQ": searchQuery,
+            "products": products,
+            "category": category
         }
-        print(request.GET)
+
         return render(request, "finder.html", data)
+    
+def productView(request):
+    return render(request, "product.html")
