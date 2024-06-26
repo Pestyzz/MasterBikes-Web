@@ -82,18 +82,18 @@ WSGI_APPLICATION = 'MasterBikes_Web.wsgi.application'
 
 # USAR ESTA BD PARA HACER TEST
 #
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
 
-#DATABASES = {
-#    'default': dj_database_url.config(
-#        default='postgresql://mb_admin:v75R44hrWrXulE1Xu43gZDlgJOlVFnNp@dpg-cpnl7fdds78s73b31550-a.oregon-postgres.render.com/bd_masterbikes'
-#    )
-#}
+DATABASES = {
+   'default': dj_database_url.config(
+       default='postgresql://mb_admin:v75R44hrWrXulE1Xu43gZDlgJOlVFnNp@dpg-cpnl7fdds78s73b31550-a.oregon-postgres.render.com/bd_masterbikes'
+   )
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators

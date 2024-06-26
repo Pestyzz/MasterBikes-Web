@@ -1,14 +1,29 @@
 {% extends "layouts/base.html" %}
 
 {% load static %}
+{% block scripts %}
+<script src="{% static "js/stock.js" %}"></script>
+{% endblock scripts %}
+
+{% load custom_filters %}
 {% block content %}
 <main class="container d-flex mt-4 bg-dark">
     <div>
         <img class="p-image image-fluid" src="{{product.imagen.url}}" alt="product-image">
     </div>
     <div class="mt-3 w-100">
-        <h4 class="text-center fw-light">{{product.marca.nombre}}</h4>
-        <h4 class="text-center fw-bolder">{{product.nombre}}</h4>
+        <h4 class="fw-light">{{product.marca.nombre}}</h4>
+        <h4 class="fw-bolder">{{product.nombre}}</h4>
+        <h5>{{product.precio|currency_format}}</h5>
+        <h5 class="fw-light">Stock: {{product.stock}}</h5>
+        <div class="d-flex justify-content-center">
+            <div class="number-input">
+                <input class="text-center" type="number" id="quantity" value="1" min="1">
+                <button class="increment" id="increment">+</button>
+                <button class="decrement" id="decrement">-</button>
+            </div>
+            <a class="btn btn-green w-50 text-dark fw-bolder">Añadir al carro</a>
+        </div>
     </div>
 </main>
 {% endblock content %}
