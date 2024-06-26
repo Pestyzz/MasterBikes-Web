@@ -46,15 +46,27 @@
                         <input class="form-control me-2" type="search" name="search" placeholder="Buscar...">
                     </form>
                     <li class="nav-item">
-                        <a class="nav-link cart" href="#">
+                        <a class="nav-link cart" href="{% url 'cart_detail' %}">
                             <i class="fas fa-cart-shopping fa-lg me-1"></i>
                             Carro
                             <span class="ms-1">0</span>
                         </a>
                     </li>
+                    {% if user.is_authenticated %}
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Iniciar Sesión</a>
+                        <form id="logoutForm" action="{% url 'logout' %}" method="post" style="display: none;">
+                        {% csrf_token %}
+                        </form>
+                        <a href="#" onclick="document.getElementById('logoutForm').submit();">Cerrar sesión</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">{{ user.email }}</a>
+                    </li> 
+                    {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'login' %}">iniciar sesión</a>
+                    </li>
+                    {% endif %}
                 </ul>
             </div>
         </div>
