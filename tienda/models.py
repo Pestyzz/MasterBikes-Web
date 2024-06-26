@@ -77,6 +77,8 @@ class Bicicleta(models.Model):
     tamanioaro = models.IntegerField(default=26)
     suspension = models.CharField(default='DELANTERA', max_length=9, choices=SUSPENSION)
     marco = models.CharField(default='ACERO', max_length=8, choices=MARCO)
+    tipobicicleta = models.CharField(default='MONTAÑA',max_length=100)
+
 
     def __str__(self):
         return self.nombre
@@ -95,6 +97,8 @@ class Accesorio(models.Model):
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     nombre = models.CharField(max_length=100)
+    tipoaccesorio = models.CharField(default='BICICLETA',max_length=100)
+    
 
     def __str__(self):
         return self.nombre
