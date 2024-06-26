@@ -1,0 +1,65 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MasterBikes</title>
+    <link rel="stylesheet" href="{% static "style/style.css" %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.css"/>
+
+    <script src="{% static "js/popper.min.js" %}"></script>
+    <script src="{% static "js/bootstrap.bundle.min.js" %}"></script>
+    {% block scripts %}
+    {% endblock scripts %}
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="{% url "home" %}">MasterBikes</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{% url "home" %}">Inicio</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url "finder" %}">Productos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url "finderCategory" "Arriendos" %}">Arriendo</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url "finderCategory" "Reparaciones" %}">Reparaciones</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0 gap-1">
+                    <form class="d-flex" role="search" method="GET" action="{% url "finder" %}">
+                        {% csrf_token %}
+                        <input class="form-control me-2" type="search" name="search" placeholder="Buscar...">
+                    </form>
+                    <li class="nav-item">
+                        <a class="nav-link cart" href="#">
+                            <i class="fas fa-cart-shopping fa-lg me-1"></i>
+                            Carro
+                            <span class="ms-1">0</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Iniciar Sesión</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    {% block banner %}
+    {% endblock banner %}
+
+    {% block content %}
+    {% endblock content %}
+</body>
+</html>

@@ -43,6 +43,19 @@
         {% endfor %}
     </ul>
 
+    <h1>Listado de Productos</h1>
+    <ul>
+        {% for producto in productos %}
+        <li>Nombre: {{ producto.nombre }}</li>
+        <li>Descripción: {{ producto.descripcion }}</li>
+        <li>Stock: {{ producto.stock }}</li>
+        <li>Precio: {{ producto.precio }}</li>
+        <li>------------------</li>
+        {% empty %}
+        <li>No hay accesorios registrados.</li>
+        {% endfor %}
+    </ul>
+
     <h1>Listado de Boletas</h1>
     <ul>
         {% for boleta in boletas %}

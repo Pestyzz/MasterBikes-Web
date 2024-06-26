@@ -1,0 +1,20 @@
+@import "../../../node_modules/bootstrap/scss/bootstrap.scss";
+@import "../../../node_modules/bootstrap/dist/bootswatch";
+@import "../../../node_modules/bootstrap/dist/variables";
+
+section.filter {
+    width: auto;
+    height: auto;
+}
+
+h4.s-query {
+    margin-left: 0;
+    max-width: 100%;
+    white-space: normal;
+    word-wrap: break-word;
+    overflow-wrap: break-word ;
+}
+
+section.container {
+    height: auto;
+}
