@@ -1,5 +1,10 @@
-from django.shortcuts import get_object_or_404, render
-from tienda.models import Producto
+from django.shortcuts import get_object_or_404, redirect, render
+from tienda.forms import CustomUserCreationForm
+from tienda.models import Cart, CartItem, Producto
+from django.contrib.auth import login
+from django.contrib.auth.decorators import login_required
+from tienda.models import Producto, Cart, CartItem
+from tienda.forms import CartAddProductForm
 
 # Create your views here.
 
@@ -40,3 +45,37 @@ def finder(request, category=None):
     
 def productView(request):
     return render(request, "product.html")
+
+def register(request):
+    if request.method == 'POST':
+        form = CustomUserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            return redirect('home')
+    else:
+        form = CustomUserCreationForm()
+    return render(request, 'registration/register.html', {'form': form})
+
+def cart_detail(request):
+    cart, created = Cart.objects.get_or_create(user=request.user)
+    items = CartItem.objects.filter(cart=cart)
+    return render(request, 'cart/detail.html', {'cart': cart, 'items': items})
+
+@login_required
+def cart_add(request, product_id):
+    product = get_object_or_404(Producto, id=product_id)
+    cart, created = Cart.objects.get_or_create(user=request.user)
+    form = CartAddProductForm(request.POST)
+    if form.is_valid():
+        cd = form.cleaned_data
+        item, created = CartItem.objects.get_or_create(cart=cart, producto=product)
+        item.quantity += cd['quantity']
+        item.save()
+    return redirect('cart_detail')
+
+@login_required
+def cart_remove(request, item_id):
+    item = get_object_or_404(CartItem, id=item_id)
+    item.delete()
+    return redirect('cart_detail')
