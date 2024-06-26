@@ -8,4 +8,5 @@ urlpatterns = [
     path('catalog/<str:category>/', views.finder, name='finderCategory'),
     path('product/', views.productView, name='product'),
     path('accounts/logout/', auth_views.LogoutView.as_view(), name='logout'),
+    path('register/', views.register, name="register")
 ]

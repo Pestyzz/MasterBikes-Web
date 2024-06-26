@@ -1,5 +1,8 @@
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, redirect, render
+from tienda.forms import CustomUserCreationForm
 from tienda.models import Producto
+from django.contrib.auth import login
+
 
 # Create your views here.
 
@@ -40,3 +43,14 @@ def finder(request, category=None):
     
 def productView(request):
     return render(request, "product.html")
+
+def register(request):
+    if request.method == 'POST':
+        form = CustomUserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            return redirect('home')
+    else:
+        form = CustomUserCreationForm()
+    return render(request, 'registration/register.html', {'form': form})

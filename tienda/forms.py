@@ -1,6 +1,7 @@
 from django import forms
 from .models import *
 from django.contrib.auth import get_user_model
+from django.contrib.auth.forms import UserCreationForm
 
 """ class BicicletaForm(forms.ModelForm):
     class Meta:
@@ -54,3 +55,13 @@ class UserForm(forms.ModelForm):
     class Meta:
         model = User
         fields = '__all__'
+        
+class CustomUserCreationForm(UserCreationForm):
+    email = forms.EmailField(required=True)
+    rut = forms.CharField(max_length=12, required=True)
+    first_name = forms.CharField(max_length=30, required=True)
+    last_name = forms.CharField(max_length=30, required=True)
+
+    class Meta:
+        model = User
+        fields = ('email', 'rut', 'first_name', 'last_name', 'password1', 'password2')
