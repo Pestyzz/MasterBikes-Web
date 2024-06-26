@@ -3,6 +3,7 @@
 @import "../../../node_modules/bootstrap/dist/variables";
 
 img.p-image {
+    width: 300px;
     height: 480px;
     margin: 8px;
     padding: 12px 0px 12px 0px;
@@ -24,30 +25,37 @@ button.btn-green:active {
 .number-input {
     position: relative;
     display: inline-flex;
-    width: 150px;
+    width: 120px;
 }
 .number-input input[type=number] {
     width: 100%;
-    padding-right: 30px;
     text-align: center;
+    padding-left: 30px;
+    padding-right: 30px;
 }
+
+.number-input input[type=number]::-webkit-inner-spin-button,
+.number-input input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0; /* Safari and Chrome */
+}  
+
 .number-input button {
     position: absolute;
-    right: 0;
     width: 30px;
-    height: 50%;
-    background-color: #28a745;
+    height: 100%;
+    background-color: transparent;
     color: white;
     border: none;
     cursor: pointer;
 }
 .number-input button.decrement {
-    top: 0;
-    border-radius: 0 0 0 4px;
+    left: 0;
+    border-radius: 4px 0 0 4px;
 }
 .number-input button.increment {
-    bottom: 0;
-    border-radius: 0 0 4px 0;
+    right: 0;
+    border-radius: 0 4px 4px 0;
 }
 .number-input button:disabled {
     background-color: #ccc;
