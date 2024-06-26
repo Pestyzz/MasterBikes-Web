@@ -49,9 +49,21 @@
                             <span class="ms-1">0</span>
                         </a>
                     </li>
+                    
+                    {% if user.is_authenticated %}
+                    <form id="logoutForm" action="{% url 'logout' %}" method="post" style="display: none;">
+                        {% csrf_token %}
+                    </form>
+                    
+                    <a href="#" onclick="document.getElementById('logoutForm').submit();">Cerrar sesión</a>
+                    {% comment %} <li class="nav-item">
+                        <a class="nav-link" href="#">{{ user.username }}</a>
+                    </li> {% endcomment %}
+                    {% else %}
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Iniciar Sesión</a>
+                        <a class="nav-link" href="{% url 'login' %}">iniciar sesión</a>
                     </li>
+                    {% endif %}
                 </ul>
             </div>
         </div>
