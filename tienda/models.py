@@ -3,6 +3,7 @@ import uuid
 import datetime
 from django.contrib.auth.models import AbstractBaseUser, User, UserManager, PermissionsMixin
 from PIL import Image
+from django.contrib.auth import get_user_model
 
 # Create your models here.
 
@@ -200,3 +201,23 @@ class Pago(models.Model):
 
     def __str__(self):
         return str(self.boleta.id)
+    
+
+
+User = get_user_model()
+
+class Cart(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'Cart {self.id} for {self.user.email}'
+
+class CartItem(models.Model):
+    cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
+    producto = models.ForeignKey(Producto, on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField(default=1)
+
+    def __str__(self):
+        return f'{self.quantity} of {self.producto.nombre}'

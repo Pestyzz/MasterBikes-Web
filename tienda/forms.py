@@ -65,3 +65,9 @@ class CustomUserCreationForm(UserCreationForm):
     class Meta:
         model = User
         fields = ('email', 'rut', 'first_name', 'last_name', 'password1', 'password2')
+
+
+class CartAddProductForm(forms.ModelForm):
+    class Meta:
+        model = CartItem
+        fields = ['quantity']
