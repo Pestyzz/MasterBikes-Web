@@ -1,15 +1,48 @@
 document.addEventListener("DOMContentLoaded", function() {
-    function assignRemoveButtons() {
-        document.querySelectorAll('.cart-remove-btn').forEach(button => {
-            button.removeEventListener('click', handleRemoveButtonClick); // Remove any existing listeners
-            button.addEventListener('click', handleRemoveButtonClick);    // Add the new listener
-        });
-    }
-
     function assignAddButtons() {
         document.querySelectorAll('.add-to-cart-btn').forEach(button => {
             button.removeEventListener('click', handleAddButtonClick); // Remove any existing listeners
             button.addEventListener('click', handleAddButtonClick);    // Add the new listener
+        });
+    }
+
+    function handleAddButtonClick(event) {
+        event.preventDefault();
+        const productId = this.dataset.productId;
+        const quantityInput = this.closest('.d-flex').querySelector('#quantity');
+        const quantity = quantityInput ? parseInt(quantityInput.value) : 1;
+
+        fetch(`/cart/add/${productId}/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCookie('csrftoken')
+            },
+            body: JSON.stringify({ quantity: quantity })
+        })
+        .then(response => {
+            if (response.status === 403) {
+                window.location.href = '/login/';
+                return;
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.success) {
+                updateCartItems(data.cart_items);
+                updateCartItemCount(data.cart_items_count);
+                assignRemoveButtons();
+            } else {
+                console.error('Error al añadir el ítem al carrito:', data.error);
+            }
+        })
+        .catch(error => console.error('Error al añadir el ítem al carrito:', error));
+    }
+
+    function assignRemoveButtons() {
+        document.querySelectorAll('.cart-remove-btn').forEach(button => {
+            button.removeEventListener('click', handleRemoveButtonClick); // Remove any existing listeners
+            button.addEventListener('click', handleRemoveButtonClick);    // Add the new listener
         });
     }
 
@@ -25,47 +58,23 @@ document.addEventListener("DOMContentLoaded", function() {
             },
             body: JSON.stringify({ item_id: itemId })
         })
-        .then(response => response.json())
+        .then(response => {
+            if (response.status === 403) {
+                window.location.href = '/login/';
+                return;
+            }
+            return response.json();
+        })
         .then(data => {
             if (data.success) {
-                // Update the offcanvas content
                 updateCartItems(data.cart_items);
                 updateCartItemCount(data.cart_items_count);
-                // Reassign remove buttons after updating the cart
                 assignRemoveButtons();
             } else {
                 console.error('Error al eliminar el ítem del carrito:', data.error);
             }
         })
         .catch(error => console.error('Error al eliminar el ítem del carrito:', error));
-    }
-
-    function handleAddButtonClick(event) {
-        event.preventDefault();
-        const productId = this.dataset.productId;
-        const quantity = 1; // Default quantity to 1 or fetch from input if available
-
-        fetch(`/cart/add/${productId}/`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': getCookie('csrftoken')
-            },
-            body: JSON.stringify({ quantity: quantity })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                // Update the offcanvas content
-                updateCartItems(data.cart_items);
-                updateCartItemCount(data.cart_items_count);
-                // Reassign remove buttons after updating the cart
-                assignRemoveButtons();
-            } else {
-                console.error('Error al añadir el ítem al carrito:', data.error);
-            }
-        })
-        .catch(error => console.error('Error al añadir el ítem al carrito:', error));
     }
 
     function updateCartItems(items) {
@@ -83,7 +92,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     cartItemsContainer.appendChild(cartItemElement);
                 });
             } else {
-                cartItemsContainer.innerHTML = '<p>No hay ítems en el carrito.</p>';
+                cartItemsContainer.innerHTML = '<p>No hay productos en el carro.</p>';
             }
         } else {
             console.error('Error: Contenedor de items del carrito no encontrado');
@@ -115,9 +124,6 @@ document.addEventListener("DOMContentLoaded", function() {
         return cookieValue;
     }
 
-    // Assign add button click handlers
     assignAddButtons();
-
-    // Assign initial remove button click handlers
     assignRemoveButtons();
 });

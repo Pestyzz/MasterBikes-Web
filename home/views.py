@@ -4,12 +4,7 @@ from tienda.models import Cart, CartItem, Producto
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from tienda.models import Producto, Cart, CartItem
-from tienda.forms import CartAddProductForm
-from django.http import JsonResponse, HttpResponseBadRequest
-from django.views.decorators.http import require_POST
-from django.template.loader import render_to_string
-from django.urls import reverse
-
+from django.http import JsonResponse
 import json
 
 # Create your views here.
