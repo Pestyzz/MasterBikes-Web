@@ -13,7 +13,7 @@ def product_list():
 
 def home(request):
     products = product_list()
-
+    
     return render(request, "index.html", {"products": products})
 
 def finder(request, category=None):

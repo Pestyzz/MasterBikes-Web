@@ -49,7 +49,11 @@
                         <a class="nav-link cart" href="{% url 'cart_detail' %}">
                             <i class="fas fa-cart-shopping fa-lg me-1"></i>
                             Carro
-                            <span class="ms-1">0</span>
+                            <span class="ms-1">
+                                {% if cart_item_count > 0 %}
+                                {{cart_item_count}}
+                                {% endif %}
+                            </span>
                         </a>
                     </li>
                     {% if user.is_authenticated %}
