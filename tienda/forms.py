@@ -1,7 +1,7 @@
 from django import forms
 from .models import *
 from django.contrib.auth import get_user_model
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 
 """ class BicicletaForm(forms.ModelForm):
     class Meta:
@@ -57,15 +57,20 @@ class UserForm(forms.ModelForm):
         fields = '__all__'
         
 class CustomUserCreationForm(UserCreationForm):
-    email = forms.EmailField(required=True)
-    rut = forms.CharField(max_length=12, required=True)
-    first_name = forms.CharField(max_length=30, required=True)
-    last_name = forms.CharField(max_length=30, required=True)
+    email = forms.EmailField(widget=forms.TextInput(attrs={'class': 'form-control'}), required=True, label='Email')
+    rut = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}), max_length=12, required=True, label='RUT')
+    first_name = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}), max_length=30, required=True, label='Primer Nombre')
+    last_name = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}), max_length=30, required=True, label='Apellido')
+    password1 = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control'}), required=True, label='Contraseña')
+    password2 = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control'}), required=True, label='Confirmar Contraseña')
 
     class Meta:
         model = User
         fields = ('email', 'rut', 'first_name', 'last_name', 'password1', 'password2')
 
+class CustomAuthenticationForm(AuthenticationForm):
+    username = forms.EmailField(widget=forms.TextInput(attrs={'class': 'form-control'}))
+    password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control'}))
 
 class CartAddProductForm(forms.ModelForm):
     class Meta:
