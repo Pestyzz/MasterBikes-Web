@@ -12129,6 +12129,7 @@ legend {
 button.btn-green {
   background-color: #a4c03a;
   border: none;
+  min-width: 120px; /* Asegura un ancho mínimo para el botón */
 }
 
 button.btn-green:hover {

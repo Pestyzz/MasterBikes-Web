@@ -1,4 +1,5 @@
 {% extends "layouts/base.html" %}
+{% block title %}<title>MasterBikes Inicio</title>{% endblock title %}
 
 {% load static %}
 {% block scripts %}
@@ -36,12 +37,12 @@
                             <h5 class="card-text">{{product.nombre}}</h5>
                             <div class="d-flex justify-content-between align-items-center">
                                 <h5 class="m-0">{{product.precio|currency_format}}</h5>
-                                <form action="{% url 'cart_add' product.id %}" method="post">
+                                <form action="{% url 'cart_add' product.id %}" method="POST">
                                     {% csrf_token %}
                                     <button type="submit" name="quantity" value="1" class="btn btn-green fw-semibold text-dark"><i class="fas fa-cart-plus fa-lg"></i>
-                                        Añadir Al Carro</button>
-                                    </form>
-                                
+                                        Añadir Al Carro
+                                    </button>
+                                </form>
                             </div>
                         </div>
                     </div>
