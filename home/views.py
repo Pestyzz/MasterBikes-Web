@@ -5,6 +5,12 @@ from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from tienda.models import Producto, Cart, CartItem
 from tienda.forms import CartAddProductForm
+from django.http import JsonResponse, HttpResponseBadRequest
+from django.views.decorators.http import require_POST
+from django.template.loader import render_to_string
+from django.urls import reverse
+
+import json
 
 # Create your views here.
 
@@ -60,20 +66,65 @@ def cart_detail(request):
     items = CartItem.objects.filter(cart=cart)
     return render(request, 'cart/detail.html', {'cart': cart, 'items': items})
 
-@login_required
-def cart_add(request, product_id):
-    product = get_object_or_404(Producto, id=product_id)
-    cart, created = Cart.objects.get_or_create(user=request.user)
-    form = CartAddProductForm(request.POST)
-    if form.is_valid():
-        cd = form.cleaned_data
-        item, created = CartItem.objects.get_or_create(cart=cart, producto=product)
-        item.quantity += cd['quantity']
-        item.save()
-    return redirect('cart_detail')
+# @login_required
+# def cart_add(request, product_id):
+#     product = get_object_or_404(Producto, id=product_id)
+#     cart, created = Cart.objects.get_or_create(user=request.user)
+#     form = CartAddProductForm(request.POST)
+#     if form.is_valid():
+#         cd = form.cleaned_data
+#         item, created = CartItem.objects.get_or_create(cart=cart, producto=product)
+#         item.quantity += cd['quantity']
+#         item.save()
+#     return redirect('cart_detail')
+
+# @login_required
+# def cart_remove(request, item_id):
+#     item = get_object_or_404(CartItem, id=item_id)
+#     item.delete()
+#     return redirect('cart_detail')
 
 @login_required
-def cart_remove(request, item_id):
-    item = get_object_or_404(CartItem, id=item_id)
-    item.delete()
-    return redirect('cart_detail')
+def cart_remove_ajax(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            item_id = data.get('item_id')
+            item = get_object_or_404(CartItem, id=item_id, cart__user=request.user)
+            item.delete()
+
+            cart = Cart.objects.get(user=request.user)
+            items = CartItem.objects.filter(cart=cart)
+            cart_items = [{'id': i.id, 'product_name': i.producto.nombre, 'quantity': i.quantity} for i in items]
+
+            return JsonResponse({'success': True, 'cart_items_count': items.count(), 'cart_items': cart_items})
+        except CartItem.DoesNotExist:
+            return JsonResponse({'success': False, 'error': 'Item not found'})
+        except Exception as e:
+            return JsonResponse({'success': False, 'error': str(e)})
+    return JsonResponse({'success': False, 'error': 'Invalid request'})
+
+
+@login_required
+def cart_add(request, product_id):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            quantity = data.get('quantity', 1)
+            product = get_object_or_404(Producto, id=product_id)
+            cart, created = Cart.objects.get_or_create(user=request.user)
+            item, created = CartItem.objects.get_or_create(cart=cart, producto=product)
+            if created:
+                item.quantity = quantity
+            else:
+                item.quantity += quantity
+            item.save()
+
+            items = CartItem.objects.filter(cart=cart)
+            cart_items = [{'id': i.id, 'product_name': i.producto.nombre, 'quantity': i.quantity} for i in items]
+
+            return JsonResponse({'success': True, 'cart_items_count': items.count(), 'cart_items': cart_items})
+        except Exception as e:
+            return JsonResponse({'success': False, 'error': str(e)})
+    return JsonResponse({'success': False, 'error': 'Invalid request'}, status=400)
+

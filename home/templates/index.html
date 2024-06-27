@@ -37,12 +37,10 @@
                             <h5 class="card-text">{{product.nombre}}</h5>
                             <div class="d-flex justify-content-between align-items-center">
                                 <h5 class="m-0">{{product.precio|currency_format}}</h5>
-                                <form action="{% url 'cart_add' product.id %}" method="POST">
-                                    {% csrf_token %}
-                                    <button type="submit" name="quantity" value="1" class="btn btn-green fw-semibold text-dark"><i class="fas fa-cart-plus fa-lg"></i>
-                                        Añadir Al Carro
-                                    </button>
-                                </form>
+                                <button type="button" class="btn btn-green fw-semibold text-dark add-to-cart-btn" data-product-id="{{ product.id }}">
+                                    <i class="fas fa-cart-plus fa-lg"></i> Añadir Al Carro
+                                </button>
+                                
                             </div>
                         </div>
                     </div>
@@ -83,10 +81,12 @@
                             <h5 class="card-text">{{product.nombre}}</h5>
                             <div class="d-flex justify-content-between align-items-center">
                                 <h5 class="m-0">{{product.precio|currency_format}}</h5>
-                                <a href="" class="btn btn-green fw-semibold text-dark">
-                                    <i class="fas fa-cart-plus fa-lg"></i>
-                                    Añadir al carro
-                                </a>
+                                <form class="add-to-cart-form" data-product-id="{{ product.id }}" action="{% url 'cart_add' product.id %}" method="POST">
+                                    {% csrf_token %}
+                                    <button type="submit" name="quantity" value="1" class="btn btn-green fw-semibold text-dark"><i class="fas fa-cart-plus fa-lg"></i>
+                                        Añadir Al Carro
+                                    </button>
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -127,10 +127,12 @@
                             <h5 class="card-text">{{product.nombre}}</h5>
                             <div class="d-flex justify-content-between align-items-center">
                                 <h5 class="m-0">{{product.precio|currency_format}}</h5>
-                                <a href="" class="btn btn-green fw-semibold text-dark">
-                                    <i class="fas fa-cart-plus fa-lg"></i>
-                                    Añadir al carro
-                                </a>
+                                <form class="add-to-cart-form" data-product-id="{{ product.id }}" action="{% url 'cart_add' product.id %}" method="POST">
+                                    {% csrf_token %}
+                                    <button type="submit" name="quantity" value="1" class="btn btn-green fw-semibold text-dark"><i class="fas fa-cart-plus fa-lg"></i>
+                                        Añadir Al Carro
+                                    </button>
+                                </form>
                             </div>
                         </div>
                     </div>

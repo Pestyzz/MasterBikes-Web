@@ -13,5 +13,5 @@ urlpatterns = [
     path('accounts/register/', views.register, name="register"),
     path('cart/', views.cart_detail, name='cart_detail'),
     path('cart/add/<uuid:product_id>/', views.cart_add, name='cart_add'),
-    path('cart/remove/<int:item_id>/', views.cart_remove, name='cart_remove'),
+    path('cart/remove-ajax/', views.cart_remove_ajax, name='cart_remove_ajax'),
 ]
