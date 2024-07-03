@@ -32,24 +32,25 @@
                 <p>{{product.descripcion}}</p>
             </div>
             <div class="mb-5">
-                <div class="d-flex justify-content-center gap-lg-3">
-                    <div class="number-input" data-stock="{{product.stock}}">
-                        <button id="decrement" class="decrement">-</button>
-                        <input id="quantity" class="form-control text-center" type="number" value="1" min="1">
-                        <button id="increment" class="increment">+</button>
+                <form action="{% url 'cartAdd' product.id %}" method="POST" class="d-flex justify-content-center align-items-center gap-3">
+                    {% csrf_token %}
+                    <div class="number-input d-flex align-items-center">
+                        <button id="decrement" class="decrement btn btn-outline-secondary" type="button">-</button>
+                        <input id="quantity" name="quantity" class="form-control text-center" type="number" value="1" min="1">
+                        <button id="increment" class="increment btn btn-outline-secondary" type="button">+</button>
                     </div>
                     {% if user.is_authenticated %}
-                    <button type="button" class="btn btn-green add-to-cart-btn text-dark fw-bolder px-5" data-product-id="{{ product.id }}">
+                    <button type="submit" class="btn btn-green text-dark fw-bolder px-4" style="height: 40px;">
                         <h5 class="m-0 text-center">Añadir al carro</h5>
                     </button>
                     {% else %}
-                    <form action="{% url "login" %}">
-                        <button type="submit" class="btn btn-green text-dark fw-bolder px-5">
+                    <form action="{% url 'login' %}">
+                        <button type="submit" class="btn btn-green text-dark fw-bolder px-4" style="height: 40px;">
                             <h5 class="m-0 text-center">Añadir al carro</h5>
                         </button>
                     </form>
                     {% endif %}
-                </div>
+                </form>
                 <div class="d-flex justify-content-center mt-3">
                     <button class="btn btn-green w-75 text-dark fw-bolder"><h5 class="m-0">COMPRAR AHORA</h5></button>
                 </div>
@@ -65,7 +66,7 @@
             <p class="mb-3 fw-bold">Suspensión: <span class="fw-normal">{{product.bicicleta.suspension}}</span></p>
             <p class="mb-3 fw-bold">Marco: <span class="fw-normal">{{product.bicicleta.marco}}</span></p>
             <p class="mb-3 fw-bold">Tipo de Bicicleta: <span class="fw-normal">{{product.bicicleta.tipobicicleta}}</span></p>
-            {% else%}
+            {% else %}
             <h4 class="mt-1">Especificaciones</h4>
             <p class="mb-3 fw-bold">Tipo de Accesorio: <span class="fw-normal">{{product.accesorio.tipoaccesorio}}</span></p>
             {% endif %}

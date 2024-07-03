@@ -58,9 +58,18 @@ def register(request):
 def cartAdd(request, product_id):
     product = get_object_or_404(Producto, id=product_id)
     cart, created = Cart.objects.get_or_create(user=request.user)
+    
+    if request.method == "POST":
+        quantity = int(request.POST.get("quantity", 1))
+    else:
+        quantity = 1
+    
     cart_item, created = CartItem.objects.get_or_create(cart=cart, product=product)
-    if not created:
-        cart_item.quantity += 1
+    if created:
+        cart_item.quantity = quantity
+    else:
+         cart_item.quantity += quantity
+         
     cart_item.save()
     return redirect('home')
 
