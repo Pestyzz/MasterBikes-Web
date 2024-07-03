@@ -11,7 +11,7 @@ urlpatterns = [
     path('accounts/login/', auth_views.LoginView.as_view(authentication_form=CustomAuthenticationForm), name='login'),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('accounts/register/', views.register, name="register"),
-    path('cart/', views.cart_detail, name='cart_detail'),
-    path('cart/add/<uuid:product_id>/', views.cart_add, name='cart_add'),
-    path('cart/remove-ajax/', views.cart_remove_ajax, name='cart_remove_ajax'),
+    path('cart/', views.cartDetail, name='cartDetail'),
+    path('cart/add/<uuid:product_id>/', views.cartAdd, name='cartAdd'),
+    path('cart/remove/<int:item_id>/', views.cartRemove, name='cartRemove'),
 ]

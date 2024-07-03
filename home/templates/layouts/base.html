@@ -11,8 +11,6 @@
     <script src="{% static "js/popper.min.js" %}"></script>
     <script src="{% static "js/bootstrap.bundle.min.js" %}"></script>
 
-    <script src="{% static "js/cart.js" %}"></script>
-    <script src="{% static "js/cartRemoveAjax.js" %}"></script>
     {% block scripts %}
     {% endblock scripts %}
 </head>
@@ -52,7 +50,7 @@
                         <a class="nav-link cart" href="#" data-bs-toggle="offcanvas" data-bs-target="#cartOffcanvas">
                             <i class="fas fa-cart-shopping fa-lg me-1"></i>
                             Carro
-                            <span class="cart-item-count ms-1">{{ cart_item_count|default:"0" }}</span>
+                            <span class="cart-item-count ms-1">{{cart_items|length}}</span>
                         </a>
                     </li>                    
                     {% if user.is_authenticated %}
@@ -89,14 +87,18 @@
                     {% for item in cart_items %}
                         <li id="cart-item-{{ item.id }}" class="mb-3">
                             <div class="card bg-body-tertiary">
-                                <div class="img-wrapper"><a href="{% url "product" item.producto.id %}"><img src="{{item.producto.imagen.url}}" class="w-100" alt="product-image"></a></div>
+                                <div class="img-wrapper">
+                                    <a href="{% url 'product' item.product.id %}">
+                                        <img src="{{ item.product.imagen.url }}" class="w-100" alt="product-image">
+                                    </a>
+                                </div>
                                 <div class="card-body text-body">
-                                    <p class="card-title">{{item.producto.marca.nombre}}</p>
-                                    <h5 class="card-text">{{item.producto.nombre}}</h5>
+                                    <p class="card-title">{{ item.product.marca.nombre }}</p>
+                                    <h5 class="card-text">{{ item.product.nombre }}</h5>
                                     <div class="d-flex justify-content-between align-items-center">
-                                        <h5 class="m-0">{{item.producto.precio|currency_format}}</h5>
-                                        <h5 class="m-0">Cantidad: {{item.quantity}}</h5>
-                                        <button class="btn btn-danger cart-remove-btn" data-item-id="{{ item.id }}">Eliminar</button>
+                                        <h5 class="m-0">{{ item.product.precio|currency_format }}</h5>
+                                        <h5 class="m-0">Cantidad: {{ item.quantity }}</h5>
+                                        <a href="{% url "cartRemove" item.id %}" class="btn btn-danger cart-remove-btn">Eliminar</a>
                                     </div>
                                 </div>
                             </div>

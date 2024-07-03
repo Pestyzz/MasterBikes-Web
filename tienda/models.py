@@ -228,7 +228,6 @@ class Pago(models.Model):
         return str(self.boleta.id)
     
 
-
 User = get_user_model()
 
 class Cart(models.Model):
@@ -241,8 +240,8 @@ class Cart(models.Model):
 
 class CartItem(models.Model):
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
-    producto = models.ForeignKey(Producto, on_delete=models.CASCADE)
+    product = models.ForeignKey(Producto, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(default=1)
 
     def __str__(self):
-        return f'{self.quantity} of {self.producto.nombre}'
+        return f'{self.quantity} of {self.product.nombre}'

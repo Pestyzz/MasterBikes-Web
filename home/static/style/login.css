@@ -12131,10 +12131,10 @@ a.btn-back {
 
 .form-control {
   background-color: transparent !important;
-  border: 1px solid #ccc !important;
-  border-radius: 4px !important;
-  padding: 10px !important;
-  font-size: 16px !important;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 10px;
+  font-size: 16px;
   color: #fff !important;
 }
 

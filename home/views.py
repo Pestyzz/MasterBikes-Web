@@ -55,71 +55,26 @@ def register(request):
         form = CustomUserCreationForm()
     return render(request, 'registration/register.html', {'form': form})
 
-@login_required
-def cart_detail(request):
+def cartAdd(request, product_id):
+    product = get_object_or_404(Producto, id=product_id)
     cart, created = Cart.objects.get_or_create(user=request.user)
-    items = CartItem.objects.filter(cart=cart)
-    return render(request, 'cart/detail.html', {'cart': cart, 'items': items})
-
-# @login_required
-# def cart_add(request, product_id):
-#     product = get_object_or_404(Producto, id=product_id)
-#     cart, created = Cart.objects.get_or_create(user=request.user)
-#     form = CartAddProductForm(request.POST)
-#     if form.is_valid():
-#         cd = form.cleaned_data
-#         item, created = CartItem.objects.get_or_create(cart=cart, producto=product)
-#         item.quantity += cd['quantity']
-#         item.save()
-#     return redirect('cart_detail')
-
-# @login_required
-# def cart_remove(request, item_id):
-#     item = get_object_or_404(CartItem, id=item_id)
-#     item.delete()
-#     return redirect('cart_detail')
-
-@login_required
-def cart_remove_ajax(request):
-    if request.method == 'POST':
-        try:
-            data = json.loads(request.body)
-            item_id = data.get('item_id')
-            item = get_object_or_404(CartItem, id=item_id, cart__user=request.user)
-            item.delete()
-
-            cart = Cart.objects.get(user=request.user)
-            items = CartItem.objects.filter(cart=cart)
-            cart_items = [{'id': i.id, 'product_name': i.producto.nombre, 'quantity': i.quantity} for i in items]
-
-            return JsonResponse({'success': True, 'cart_items_count': items.count(), 'cart_items': cart_items})
-        except CartItem.DoesNotExist:
-            return JsonResponse({'success': False, 'error': 'Item not found'})
-        except Exception as e:
-            return JsonResponse({'success': False, 'error': str(e)})
-    return JsonResponse({'success': False, 'error': 'Invalid request'})
+    cart_item, created = CartItem.objects.get_or_create(cart=cart, product=product)
+    if not created:
+        cart_item.quantity += 1
+    cart_item.save()
+    return redirect('home')
 
 
-@login_required
-def cart_add(request, product_id):
-    if request.method == 'POST':
-        try:
-            data = json.loads(request.body)
-            quantity = data.get('quantity', 1)
-            product = get_object_or_404(Producto, id=product_id)
-            cart, created = Cart.objects.get_or_create(user=request.user)
-            item, created = CartItem.objects.get_or_create(cart=cart, producto=product)
-            if created:
-                item.quantity = quantity
-            else:
-                item.quantity += quantity
-            item.save()
+def cartRemove(request, item_id):
+    cart_item = get_object_or_404(CartItem, id=item_id, cart__user=request.user)
+    if cart_item.quantity > 1:
+        cart_item.quantity -= 1
+        cart_item.save()
+    else:
+        cart_item.delete()
+    return redirect('home')
 
-            items = CartItem.objects.filter(cart=cart)
-            cart_items = [{'id': i.id, 'product_name': i.producto.nombre, 'quantity': i.quantity} for i in items]
-
-            return JsonResponse({'success': True, 'cart_items_count': items.count(), 'cart_items': cart_items})
-        except Exception as e:
-            return JsonResponse({'success': False, 'error': str(e)})
-    return JsonResponse({'success': False, 'error': 'Invalid request'}, status=400)
-
+def cartDetail(request):
+    cart, created = Cart.objects.get_or_create(user=request.user)
+    cart_items = CartItem.objects.filter(cart=cart)
+    return render(request, 'index.html', {'cart_items': cart_items})
