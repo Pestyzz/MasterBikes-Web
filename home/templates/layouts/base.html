@@ -56,7 +56,9 @@
                     {% if user.is_authenticated %}
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="" id="dropdownId" data-bs-toggle="dropdown">
-                            {{user.email}}
+                            {% if user.is_superuser %}
+                            Vendedor: {{user.email}}
+                            {% endif %}
                         </a>
                         <div class="dropdown-menu">
                             <form id="logoutForm" action="{% url 'logout' %}" method="post" style="display: none;">
