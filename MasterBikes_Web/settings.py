@@ -93,7 +93,7 @@ WSGI_APPLICATION = 'MasterBikes_Web.wsgi.application'
 
 DATABASES = {
    'default': dj_database_url.config(
-       default='postgresql://mb_admin:v75R44hrWrXulE1Xu43gZDlgJOlVFnNp@dpg-cpnl7fdds78s73b31550-a.oregon-postgres.render.com/bd_masterbikes'
+       default='postgresql://mb_admin:56MCrpb9xww6hfI8xZFyRGseE5pcF4Kb@dpg-cq8sq7jv2p9s73cab3lg-a.oregon-postgres.render.com/bd_masterbikes_gn27'
    )
 }
 
