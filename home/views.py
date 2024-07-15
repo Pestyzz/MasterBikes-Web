@@ -1,6 +1,6 @@
 from django.shortcuts import get_object_or_404, redirect, render
-from tienda.forms import CustomUserCreationForm
-from tienda.models import Cart, CartItem, Producto
+from tienda.forms import CustomUserCreationForm, PagoForm
+from tienda.models import Cart, CartItem, Producto, Pago, Boleta, DetalleBoleta
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from tienda.models import Producto, Cart, CartItem
@@ -55,6 +55,7 @@ def register(request):
         form = CustomUserCreationForm()
     return render(request, 'registration/register.html', {'form': form})
 
+@login_required
 def cartAdd(request, product_id):
     product = get_object_or_404(Producto, id=product_id)
     cart, created = Cart.objects.get_or_create(user=request.user)
@@ -73,7 +74,7 @@ def cartAdd(request, product_id):
     cart_item.save()
     return redirect('home')
 
-
+@login_required
 def cartRemove(request, item_id):
     cart_item = get_object_or_404(CartItem, id=item_id, cart__user=request.user)
     if cart_item.quantity > 1:
@@ -83,7 +84,44 @@ def cartRemove(request, item_id):
         cart_item.delete()
     return redirect('home')
 
+@login_required
 def cartDetail(request):
     cart, created = Cart.objects.get_or_create(user=request.user)
     cart_items = CartItem.objects.filter(cart=cart)
     return render(request, 'index.html', {'cart_items': cart_items})
+
+@login_required
+def payment(request):
+    user = request.user
+    cart = Cart.objects.get(user=user)
+    cart_items = CartItem.objects.filter(cart=cart)
+
+    if request.method == 'POST':
+        form = PagoForm(request.POST)
+        if form.is_valid():
+            boleta = Boleta.objects.create(cliente=user)
+            
+            for item in cart_items:
+                DetalleBoleta.objects.create(
+                    boleta=boleta,
+                    producto=item.product,
+                    cantidad=item.quantity
+                )
+            
+            pago = form.save(commit=False)
+            pago.boleta = boleta
+            pago.estado = 'P'
+            pago.save()
+            
+            cart_items.delete()
+
+            return redirect('success_page')  # Redirigir a una página de éxito
+
+    else:
+        form = PagoForm()
+
+    context = {
+        'cart_items': cart_items,
+        'form': form,
+    }
+    return render(request, 'payment.html', context)

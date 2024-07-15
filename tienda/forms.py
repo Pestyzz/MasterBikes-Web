@@ -49,7 +49,11 @@ class DeliveryForm(forms.ModelForm):
 class PagoForm(forms.ModelForm):
     class Meta:
         model = Pago
-        fields = '__all__'
+        fields = ['tipo_pago', 'codigo_autorizacion']
+        widgets = {
+            'tipo_pago': forms.Select(choices=Pago.TIPO),
+            'codigo_autorizacion': forms.TextInput(attrs={'placeholder': 'Código de Autorización'}),
+        }
 
 class UserForm(forms.ModelForm):
     class Meta:

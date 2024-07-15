@@ -36384,6 +36384,9 @@ button.btn-green:active {
   text-align: center;
   padding-left: 30px;
   padding-right: 30px;
+  border: 1px solid #ced4da; /* Asegura que el input tenga borde */
+  border-radius: 0.25em; /* Ajusta la esquina del input */
+  height: 40px; /* Asegura una altura consistente */
 }
 
 .number-input input[type=number]::-webkit-inner-spin-button,

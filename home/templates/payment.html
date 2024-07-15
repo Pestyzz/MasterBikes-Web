@@ -1,0 +1,31 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pago</title>
+    <link rel="stylesheet" href="{% static "style/payment.css" %}">
+</head>
+<body>
+    <h1>Página de Pago</h1>
+
+  <div>
+    <h2>Carrito</h2>
+    <ul>
+      {% for item in cart_items %}
+        <li>{{ item.quantity }} x {{ item.product.nombre }} - ${{ item.product.precio }}</li>
+      {% endfor %}
+    </ul>
+  </div>
+
+  <div>
+    <h2>Formulario de Pago</h2>
+    <form method="post">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit">Pagar</button>
+    </form>
+  </div>
+</body>
+</html>

@@ -87,7 +87,7 @@
         </div>
         <div class="offcanvas-body">
             {% if cart_items %}
-                <ul class="list-unstyled" id="cart-items-list">
+                <ul class="list-unstyled mb-auto overflow-y-auto" id="cart-items-list">
                     {% for item in cart_items %}
                         <li id="cart-item-{{ item.id }}" class="mb-3">
                             <div class="card bg-body-tertiary">
@@ -112,6 +112,9 @@
                         </li>
                     {% endfor %}
                 </ul>
+                <div class="w-100 mt-auto">
+                    <a href="{% url "payment" %}" class="btn btn-green text-dark w-100">Proceder Pago</a>
+                </div>
             {% else %}
                 <p>No hay productos en el carro.</p>
             {% endif %}
