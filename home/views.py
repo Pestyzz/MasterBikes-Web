@@ -1,5 +1,5 @@
 from django.shortcuts import get_object_or_404, redirect, render
-from tienda.forms import CustomUserCreationForm, PagoForm
+from tienda.forms import CustomUserCreationForm, PagoForm, DeliveryForm
 from tienda.models import Cart, CartItem, Producto, Pago, Boleta, DetalleBoleta
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
@@ -97,10 +97,13 @@ def payment(request):
     cart_items = CartItem.objects.filter(cart=cart)
 
     if request.method == 'POST':
-        form = PagoForm(request.POST)
-        if form.is_valid():
+        pago_form = PagoForm(request.POST)
+        delivery_form = DeliveryForm(request.POST)
+        if pago_form.is_valid() and delivery_form.is_valid():
+            # Crear Boleta
             boleta = Boleta.objects.create(cliente=user)
             
+            # Crear DetalleBoleta
             for item in cart_items:
                 DetalleBoleta.objects.create(
                     boleta=boleta,
@@ -108,20 +111,29 @@ def payment(request):
                     cantidad=item.quantity
                 )
             
-            pago = form.save(commit=False)
+            # Crear Pago
+            pago = pago_form.save(commit=False)
             pago.boleta = boleta
             pago.estado = 'P'
             pago.save()
+
+            # Crear Delivery
+            delivery = delivery_form.save(commit=False)
+            delivery.boleta = boleta
+            delivery.save()
             
+            # Limpiar el carrito
             cart_items.delete()
 
-            return redirect('success_page')  # Redirigir a una página de éxito
+            return redirect("home")
 
     else:
-        form = PagoForm()
+        pago_form = PagoForm()
+        delivery_form = DeliveryForm()
 
     context = {
         'cart_items': cart_items,
-        'form': form,
+        'pago_form': pago_form,
+        'delivery_form': delivery_form,
     }
     return render(request, 'payment.html', context)

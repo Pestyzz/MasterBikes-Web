@@ -179,7 +179,7 @@ class DetalleBoleta(models.Model):
     cantidad = models.IntegerField(default=0)
 
     def __str__(self):
-        return str(self.boleta.id) + '-' + self.producto.name
+        return str(self.boleta.id) + '-' + self.producto.nombre
 
 
 class Delivery(models.Model):

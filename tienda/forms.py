@@ -42,9 +42,10 @@ class DetalleBoletaForm(forms.ModelForm):
         fields = '__all__'
 
 class DeliveryForm(forms.ModelForm):
+    comentarios = forms.CharField(widget=forms.Textarea, label='Comentarios Adicionales')
     class Meta:
         model = Delivery
-        fields = '__all__'
+        fields = ['comentarios', 'direccion', 'ciudad', 'region', 'codigo_postal']
 
 class PagoForm(forms.ModelForm):
     class Meta:
