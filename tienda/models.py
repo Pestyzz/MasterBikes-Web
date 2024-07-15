@@ -106,7 +106,6 @@ class Servicio(models.Model):
 
 class Accesorio(models.Model):
 
-
     TIPO = {
         "BICICLETA": "BICICLETA",
         "CASCOS": "CASCOS",
@@ -165,8 +164,6 @@ class Boleta(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     cliente = models.ForeignKey(User, on_delete=models.CASCADE)
     fecha_creacion = models.DateTimeField(auto_now_add=True)
-    estado = models.BooleanField(default=False)
-    id_transaccion = models.CharField(max_length=100, null=True)
 
     def __str__(self):
         return str(self.id) + '-' + self.cliente.email
@@ -196,7 +193,8 @@ class Delivery(models.Model):
     direccion = models.CharField(max_length=100, null=True, blank=True)
     ciudad = models.CharField(max_length=100, null=True, blank=True)
     region = models.CharField(max_length=100, null=True, blank=True)
-    codigo_postal = models.CharField(max_length=10, null=True, blank=True)
+    num_hogar = models.CharField(max_length=4, null=True, blank=True)
+    telefono = models.IntegerField(max_length=9)
     estado = models.CharField(max_length=1, choices=ESTADO, default='P')
 
     def __str__(self):
@@ -212,17 +210,21 @@ class Pago(models.Model):
     }
 
     TIPO = {
-        "T": "TRANSFERENCIA",
         "C": "CREDITO",
         "D": "DEBITO",
+    }
+    
+    ENTREGA = {
+        "R": "RETIRO EN TIENDA",
+        "D": "DELIVERY",
     }
 
     estado = models.BooleanField(default=False)
     fecha_pago = models.DateTimeField(auto_now_add=True)
-    tipo_pago = models.CharField(max_length=1, choices=TIPO)
+    tipo_pago = models.CharField(max_length=1, choices=TIPO, default='C')
+    tipo_entrega = models.CharField(max_length=1, choices=ENTREGA, default='R')
     boleta = models.OneToOneField(Boleta, on_delete=models.CASCADE, null=True, blank=True)
     estado = models.CharField(max_length=1, choices=ESTADO, default='P')
-    codigo_autorizacion = models.CharField(max_length=100, null=True, blank=True)
 
     def __str__(self):
         return str(self.boleta.id)

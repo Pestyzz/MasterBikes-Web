@@ -99,7 +99,7 @@ def payment(request):
     if request.method == 'POST':
         pago_form = PagoForm(request.POST)
         delivery_form = DeliveryForm(request.POST)
-        if pago_form.is_valid() and delivery_form.is_valid():
+        if pago_form.is_valid() and (delivery_form.is_valid() or pago_form.cleaned_data['tipo_entrega'] == 'R'):
             # Crear Boleta
             boleta = Boleta.objects.create(cliente=user)
             
@@ -115,17 +115,19 @@ def payment(request):
             pago = pago_form.save(commit=False)
             pago.boleta = boleta
             pago.estado = 'P'
+            # Aquí manejarías la lógica de procesar el pago con la tarjeta
             pago.save()
 
-            # Crear Delivery
-            delivery = delivery_form.save(commit=False)
-            delivery.boleta = boleta
-            delivery.save()
+            if pago_form.cleaned_data['tipo_entrega'] == 'D':
+                # Crear Delivery
+                delivery = delivery_form.save(commit=False)
+                delivery.boleta = boleta
+                delivery.save()
             
             # Limpiar el carrito
             cart_items.delete()
 
-            return redirect("home")
+            return redirect('home')  # Redirigir a una página de éxito
 
     else:
         pago_form = PagoForm()

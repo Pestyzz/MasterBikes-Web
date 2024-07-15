@@ -1,6 +1,7 @@
 {% load static %}
+{% load custom_filters %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-bs-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,26 +9,74 @@
     <link rel="stylesheet" href="{% static "style/payment.css" %}">
 </head>
 <body>
-  <h1>Página de Pago</h1>
+  <main>
+    <div class="border-bottom">
+      <img src="{% static "img/loginImage.svg" %}" class="m-3 form" alt="mb-logo" style="height: 90px;">
+    </div>
 
-  <div>
-    <h2>Carrito</h2>
-    <ul>
-      {% for item in cart_items %}
-        <li>{{ item.quantity }} x {{ item.product.nombre }} - ${{ item.product.precio }}</li>
-      {% endfor %}
-    </ul>
-  </div>
+    <div class="d-flex">
+      <div class="col-6 mx-4">
+        <h2>Formulario de Pago</h2>
+        <form method="post">
+          {% csrf_token %}
+          {{ pago_form.as_p }}
+          <div id="retiro-message" style="display: none;">
+            <h2>RETIRO EN: TIENDA MÁS CERCANA</h2>
+          </div>
+          <div id="delivery-form" style="display: none;">
+            <h2>Formulario de Delivery</h2>
+            {{ delivery_form.as_p }}
+          </div>
+          <button class="btn btn-green w-100" type="submit">Pagar</button>
+        </form>
+      </div>
+      <div class="col-6 bg-body-secondary">
+        <ul>
+          {% for item in cart_items %}
+          <li class="mb-3">
+            <div class="card bg-body-tertiary col-6">
+                <div class="img-wrapper">
+                    <a href="{% url 'product' item.product.id %}">
+                        <img src="{{item.product.imagen.url}}" class="w-100" alt="product-image">
+                    </a>
+                </div>
+                <div class="card-body text-body">
+                    <p class="card-title">{{item.product.marca.nombre}}</p>
+                    <h5 class="card-text">{{item.product.nombre}}</h5>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="m-0">{{item.product.precio|currency_format}}</h5>
+                        <h5 class="m-0">Cantidad: {{item.quantity}}</h5>
+                    </div>
+                </div>
+            </div>
+        </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </main>
 
-  <div>
-    <h2>Formulario de Pago</h2>
-    <form method="post">
-      {% csrf_token %}
-      {{ pago_form.as_p }}
-      <h2>Opciones de Delivery</h2>
-      {{ delivery_form.as_p }}
-      <button type="submit">Pagar</button>
-    </form>
-  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const tipoEntregaSelect = document.querySelector('select[name="tipo_entrega"]');
+      const deliveryForm = document.getElementById('delivery-form');
+      const retiroMessage = document.getElementById('retiro-message');
+      
+      function updateFormVisibility() {
+        if (tipoEntregaSelect.value === 'D') {
+          deliveryForm.style.display = 'block';
+          retiroMessage.style.display = 'none';
+        } else {
+          deliveryForm.style.display = 'none';
+          retiroMessage.style.display = 'block';
+        }
+      }
+
+      tipoEntregaSelect.addEventListener('change', updateFormVisibility);
+
+      // Inicializar el estado del formulario de delivery
+      updateFormVisibility();
+    });
+  </script>
 </body>
 </html>

@@ -42,18 +42,45 @@ class DetalleBoletaForm(forms.ModelForm):
         fields = '__all__'
 
 class DeliveryForm(forms.ModelForm):
-    comentarios = forms.CharField(widget=forms.Textarea, label='Comentarios Adicionales')
+    comentarios = forms.CharField(label='Comentarios Adicionales', widget=forms.Textarea(attrs={'class': 'form-control'}),)
+    num_hogar = forms.CharField(label='N° Depto/Casa', widget=forms.TextInput(attrs={'class': 'form-control'}))
+
     class Meta:
         model = Delivery
-        fields = ['comentarios', 'direccion', 'ciudad', 'region', 'codigo_postal']
-
+        fields = ['comentarios', 'direccion', 'region', 'ciudad', 'num_hogar']
+        widgets = {
+            'direccion': forms.TextInput(attrs={'class': 'form-control'}),
+            'region': forms.TextInput(attrs={'class': 'form-control'}),
+            'ciudad': forms.TextInput(attrs={'class': 'form-control'}),
+            'num_hogar': forms.TextInput(attrs={'class': 'form-control'}),
+        }
 class PagoForm(forms.ModelForm):
+    numero_tarjeta = forms.CharField(
+        max_length=16,
+        label='Número de Tarjeta',
+        widget=forms.TextInput(attrs={'class': 'form-control'})
+    )
+    fecha_expiracion = forms.CharField(
+        max_length=5,
+        label='Fecha de Expiración (MM/AA)',
+        widget=forms.TextInput(attrs={'class': 'form-control'})
+    )
+    cvv = forms.CharField(
+        max_length=3,
+        label='CVV',
+        widget=forms.TextInput(attrs={'class': 'form-control'})
+    )
+
     class Meta:
         model = Pago
-        fields = ['tipo_pago', 'codigo_autorizacion']
+        fields = ['tipo_pago', 'tipo_entrega']
+        labels = {
+            'tipo_pago': 'Métodos de pago',
+            'tipo_entrega': 'Métodos de envío'
+        }
         widgets = {
-            'tipo_pago': forms.Select(choices=Pago.TIPO),
-            'codigo_autorizacion': forms.TextInput(attrs={'placeholder': 'Código de Autorización'}),
+            'tipo_pago': forms.Select(attrs={'class': 'form-control'}),
+            'tipo_entrega': forms.Select(attrs={'class': 'form-control'}),
         }
 
 class UserForm(forms.ModelForm):
@@ -71,7 +98,7 @@ class CustomUserCreationForm(UserCreationForm):
 
     class Meta:
         model = User
-        fields = ('email', 'rut', 'first_name', 'last_name', 'password1', 'password2')
+        fields = ['email', 'rut', 'first_name', 'last_name', 'password1', 'password2']
 
 class CustomAuthenticationForm(AuthenticationForm):
     username = forms.EmailField(widget=forms.TextInput(attrs={'class': 'form-control'}))
