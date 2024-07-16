@@ -1,28 +1,42 @@
 {% extends "layouts/base.html" %}
-{% block title %}<title>MasterBikes Inicio</title>{% endblock title %}
+{% block title %}<title>{% if user.is_staff %}Pedidos {% else %}Mis Pedidos{% endif %}</title>{% endblock title %}
 
 {% load static %}
-{% block scripts %}
-<script src="{% static "js/cardSlider.js" %}"></script>
-{% endblock scripts %}
+{% load custom_filters %}
 
 {% load custom_filters %}
 {% block content %}
-
-{% for pedido in pedidos %}
-    <li class="order-item">
-        <div class="order-header">
-            <strong>Número de Pedido:</strong> {{ pedido.pk }}
+<main class="container bg-dark p-4">
+    <div class="border-bottom mb-4">
+        <h1>{% if user.is_staff %}Pedidos {% else %}Mis Pedidos{% endif %}({{pedidos|length}})</h1>
+    </div>
+    {% for pedido in pedidos %}
+    <li class="list-unstyled mb-3 p-3 d-flex justify-content-between align-items-center border rounded-1">
+        <div>
+            <div>
+                <h2>Número de Pedido: {{pedido.pk}}</h2>
+            </div>
+            <div>
+                <div class="d-flex align-items-center gap-2">
+                    <h4>Fecha:</h4> 
+                    <h5 class="fw-normal">{{pedido.fecha_pedido}}</h5> 
+                </div>
+                <div class="d-flex align-items-center gap-2">
+                    <h4>Total:</h4>
+                    <h5 class="fw-normal">{{pedido.total}}</h5>
+                </div>
+                <div class="d-flex align-items-center gap-2">
+                    <h4>Estado:</h4>
+                    <h5 class="fw-normal">{{pedido.estado|upper}}</h5>
+                </div>
+            </div>
         </div>
-        <div class="order-details">
-            <strong>Fecha:</strong> {{ pedido.fecha_pedido }}<br>
-            <strong>Total:</strong> {{ pedido.total }}<br>
-            <strong>Estado:</strong> {{ pedido.estado }}<br>
+        <div class="mt-2">
+            <a href="{% url 'detallepedido' pedido.id %}" class="btn btn-lg btn-green text-dark">Ver Detalles</a>
         </div>
-        <a href="{% url 'detallepedido' pedido.id %}" class="order-link">Ver Detalles</a> <!-- Enlace opcional para ver detalles del pedido -->
     </li>
     {% empty %}
     <li class="order-item">No tienes pedidos realizados.</li>
     {% endfor %}
-    
+</main>
 {% endblock content %}
