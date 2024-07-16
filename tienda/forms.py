@@ -76,3 +76,15 @@ class CartAddProductForm(forms.ModelForm):
     class Meta:
         model = CartItem
         fields = ['quantity']
+
+class EstadoPedidoForm(forms.ModelForm):
+    class Meta:
+        model = Pedido
+        fields = ['estado']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Personaliza el widget del campo estado si es necesario
+        self.fields['estado'].widget.attrs.update({'class': 'form-control'})  # Añade clases CSS si las necesitas
+        self.fields['estado'].label = 'Estado del Pedido'  # Personaliza la etiqueta del campo
+        self.fields['estado'].choices = Pedido.TIPO_ESTADO_PEDIDO  # Usa las opciones definidas en el modelo Pedido

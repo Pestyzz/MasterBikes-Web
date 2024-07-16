@@ -1,36 +1,55 @@
 from django.shortcuts import get_object_or_404, redirect, render
-from tienda.forms import CustomUserCreationForm
+from tienda.forms import CustomUserCreationForm, CartAddProductForm
 from tienda.models import Cart, CartItem, Producto
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
-from tienda.models import Producto, Cart, CartItem
-from django.http import JsonResponse
-import json
+from django.contrib import messages
+from django.db import transaction
+from tienda.models import Pedido, PedidoItem
+from django.http import JsonResponse, HttpResponseRedirect
 
 # Create your views here.
 
 def product_list():
-    return Producto.objects.all
+    return Producto.objects.all()
 
 def home(request):
     products = product_list()
     
-    return render(request, "index.html", {"products": products})
+    cart_item_count = 0
+    items = []
+    total = 0
+
+    if request.user.is_authenticated:
+        cart, created = Cart.objects.get_or_create(user=request.user)
+        cart_items = CartItem.objects.filter(cart=cart).select_related('producto')
+        cart_item_count = sum(item.quantity for item in cart_items)  # Sumar la cantidad de cada producto
+        items = cart_items
+        total = sum(item.producto.precio * item.quantity for item in items)
+    else:
+        cart = None
+
+    total_product_count = products.count()
+
+    context = {
+        'cart_item_count': cart_item_count,
+        'cart': cart,
+        'items': items,
+        'total': total,
+        'products': products,
+        'total_product_count': total_product_count
+    }
+    print(cart_item_count)
+    return render(request, "index.html", context)
+
 
 def finder(request, category=None):
     products = None
-    
+
     if request.method == "GET":
         searchQuery = request.GET.get("search", "")
         
-        if category == "Bicicletas":
-            products = Producto.objects.filter(bicicleta__isnull=False, nombre__icontains=searchQuery)
-        elif category == "Accesorios":
-            products = Producto.objects.filter(accesorio__isnull=False, nombre__icontains=searchQuery)
-        elif category == "Servicios":
-            products = Producto.objects.filter(servicio__isnull=False, nombre__icontains=searchQuery)
-        else:
-            products = Producto.objects.filter(nombre__icontains=searchQuery) or Producto.objects.filter(marca__nombre__icontains=searchQuery)
+        products = Producto.objects.all()
         
         data = {
             "searchQ": searchQuery,
@@ -39,9 +58,9 @@ def finder(request, category=None):
         }
 
         return render(request, "finder.html", data)
-    
+
 def productView(request, id):
-    product = get_object_or_404(Producto,id=id)
+    product = get_object_or_404(Producto, id=id)
     return render(request, "product.html", {"product": product})
 
 def register(request):
@@ -55,37 +74,116 @@ def register(request):
         form = CustomUserCreationForm()
     return render(request, 'registration/register.html', {'form': form})
 
+def pedidos(request):
+    if request.user.is_staff:
+        pedidos = Pedido.objects.all()
+    else:
+        pedidos = Pedido.objects.filter(user=request.user)
+    
+    return render(request, "pedidos.html",  {'pedidos': pedidos})
+
+
+from tienda.forms import EstadoPedidoForm
+def detallepedido(request, pedido_id):
+    pedido = get_object_or_404(Pedido, id=pedido_id)
+    detalle_pedido = PedidoItem.objects.filter(pedido_id = pedido_id)
+    
+    if request.user.is_staff:
+        if request.method == 'POST':
+            form = EstadoPedidoForm(request.POST, instance=pedido)
+            if form.is_valid():
+                form.save()
+                return redirect('detallepedido', pedido_id=pedido.id)
+        else:
+            form = EstadoPedidoForm(instance=pedido)
+    else:
+        form = None
+
+    return render(request, 'detallepedido.html', {'pedido': pedido, 'productos': detalle_pedido, 'form': form})
+# CARRITO
+def cartDetail(request):
+    cart, created = Cart.objects.get_or_create(user=request.user)
+    items = CartItem.objects.filter(cart=cart).select_related('producto')
+    
+    if not items.exists():
+        messages.warning(request, 'No tienes ningún producto en tu carrito.')
+        return redirect('finder')
+    
+    total = sum(item.producto.precio * item.quantity for item in items)
+    
+    if request.method == 'POST':
+        with transaction.atomic():
+            # Crear el objeto Pedido
+            pedido = Pedido.objects.create(
+                user=request.user,
+                total=total,
+                estado='pendiente'
+            )
+            
+            # Iterar sobre los items del carrito y agregarlos al pedido
+            for item in items:
+                # Verificar si hay suficiente stock disponible
+                if item.producto.stock >= item.quantity:
+                    PedidoItem.objects.create(
+                        pedido=pedido,
+                        producto=item.producto,
+                        cantidad=item.quantity
+                    )
+                    # Reducir la cantidad en el stock del producto
+                    item.producto.stock -= item.quantity
+                    item.producto.save()
+                else:
+                    messages.error(request, f'No hay suficiente stock disponible para {item.producto.nombre}.')
+                    return redirect('cartDetail')
+            
+            # Vaciar el carrito después de completar el pedido
+            cart.cartitem_set.all().delete()
+            cart.delete()
+            messages.success(request, 'Pedido realizado, espere actualizaciones de estado.')
+        return redirect('pedidos')
+    return render(request, 'cart/detail.html', {'cart': cart, 'items': items, 'total': total})
+
 @login_required
 def cartAdd(request, product_id):
     product = get_object_or_404(Producto, id=product_id)
     cart, created = Cart.objects.get_or_create(user=request.user)
-    
-    if request.method == "POST":
-        quantity = int(request.POST.get("quantity", 1))
-    else:
-        quantity = 1
-    
-    cart_item, created = CartItem.objects.get_or_create(cart=cart, product=product)
-    if created:
-        cart_item.quantity = quantity
-    else:
-         cart_item.quantity += quantity
-         
-    cart_item.save()
-    return redirect('home')
+    form = CartAddProductForm(request.POST)
+    if form.is_valid():
+        cd = form.cleaned_data
+        item, created = CartItem.objects.get_or_create(cart=cart, producto=product)
+        item.quantity += cd['quantity']
+        item.save()
+
+    # Capturar la URL anterior del usuario
+    previous_url = request.META.get('HTTP_REFERER', '/')
+    return HttpResponseRedirect(previous_url)
 
 @login_required
 def cartRemove(request, item_id):
-    cart_item = get_object_or_404(CartItem, id=item_id, cart__user=request.user)
-    if cart_item.quantity > 1:
-        cart_item.quantity -= 1
-        cart_item.save()
-    else:
-        cart_item.delete()
-    return redirect('home')
+    item = get_object_or_404(CartItem, id=item_id)
+    item.delete()
+    return redirect('cartDetail')
 
 @login_required
-def cartDetail(request):
-    cart, created = Cart.objects.get_or_create(user=request.user)
-    cart_items = CartItem.objects.filter(cart=cart)
-    return render(request, 'index.html', {'cart_items': cart_items})
+def cartUpdate(request, item_id):
+    item = get_object_or_404(CartItem, id=item_id)
+
+    if request.method == 'POST':
+        action = request.POST.get('action')
+
+        if action == 'incrementar':
+            if item.quantity < item.producto.stock:
+                item.quantity += 1
+                item.save()
+            else:
+                messages.error(request, 'No hay suficiente stock disponible')
+        elif action == 'decrementar':
+            if item.quantity > 1:
+                item.quantity -= 1
+                item.save()
+            else:
+                # Si la cantidad es 1 y se intenta decrementar, eliminar el producto del carrito
+                item.delete()
+
+    previous_url = request.META.get('HTTP_REFERER', '/')
+    return HttpResponseRedirect(previous_url)

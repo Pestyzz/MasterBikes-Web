@@ -1,0 +1,50 @@
+<!-- En tu template ruta_a_tu_template.html -->
+
+{% extends "layouts/base.html" %}
+{% block title %}<title>MasterBikes Inicio</title>{% endblock title %}
+
+{% load static %}
+{% block scripts %}
+<script src="{% static "js/cardSlider.js" %}"></script>
+{% endblock scripts %}
+
+{% load custom_filters %}
+{% block content %}
+<h1 class="page-title">Detalle del Pedido #{{ pedido.id }}</h1>
+    <div class="product-details-header">
+        <p><strong>Fecha de Pedido:</strong> {{ pedido.fecha_pedido }}</p>
+        <p><strong>Total:</strong> {{ pedido.total }}</p>
+        <p><strong>Estado:</strong> {{ pedido.estado }}</p>
+    </div>
+    
+    <ul class="list-unstyled" id="cart-items-list">
+        {% for item in productos %}
+            <li id="cart-item-{{ item.id }}" class="mb-3">
+                <div class="card bg-body-tertiary">
+                    <div class="img-wrapper">
+                        <a href="{% url 'product' item.producto.id %}">
+                            <img src="{{item.producto.imagen.url}}" class="w-100" alt="product-image">
+                        </a>
+                    </div>
+                    <div class="card-body text-body">
+                        <p class="card-title">{{item.producto.marca.nombre}}</p>
+                        <h5 class="card-text">{{item.producto.nombre}}</h5>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h5 class="m-0">{{item.producto.precio}}</h5>
+                            <h5 class="m-0">Cantidad: {{item.cantidad}}</h5>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        {% endfor %}
+    </ul>
+
+    {% if form %}
+        <form method="post" class="form">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+        </form>
+    {% endif %}
+    
+{% endblock content %}
