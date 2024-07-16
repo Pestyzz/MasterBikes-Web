@@ -74,6 +74,7 @@ def register(request):
         form = CustomUserCreationForm()
     return render(request, 'registration/register.html', {'form': form})
 
+@login_required
 def pedidos(request):
     if request.user.is_staff:
         pedidos = Pedido.objects.all()
