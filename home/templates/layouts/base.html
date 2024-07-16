@@ -44,9 +44,6 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{% url "finderCategory" "Servicios" %}">Servicios</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url "pedidos" %}">pedidos</a>
-                    </li>
                 </ul>
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0 gap-1">
                     <form class="d-flex" role="search" method="GET" action="{% url "finder" %}">
@@ -70,11 +67,14 @@
                             {% endif %}
                         </a>
                         <div class="dropdown-menu">
+                            <a class="dropdown-item" href="{% url "pedidos" %}">Mis Pedidos</a>
+                            <div class="dropdown-divider"></div>
                             <form id="logoutForm" action="{% url 'logout' %}" method="post" style="display: none;">
                                 {% csrf_token %}
                             </form>
                             <a class="dropdown-item" href="#"
-                                onclick="document.getElementById('logoutForm').submit();">Cerrar Sesión</a>
+                                onclick="document.getElementById('logoutForm').submit();">Cerrar Sesión
+                            </a>
                         </div>
                     </li>
                     {% else %}
