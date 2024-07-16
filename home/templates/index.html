@@ -37,17 +37,9 @@
                             <h5 class="card-text">{{product.nombre}}</h5>
                             <div class="d-flex justify-content-between align-items-center">
                                 <h5 class="m-0">{{product.precio|currency_format}}</h5>
-                                {% if user.is_authenticated %}
                                 <a href="{% url "cartAdd" product.id %}" class="btn btn-green fw-semibold text-dark add-to-cart-btn">
                                     <i class="fas fa-cart-plus fa-lg"></i> Añadir Al Carro
                                 </a>
-                                {% else %}
-                                <form action="{% url "login" %}">
-                                    <button type="submit" class="btn btn-green fw-semibold text-dark">
-                                        <i class="fas fa-cart-plus fa-lg"></i> Añadir Al Carro
-                                    </button>
-                                </form>
-                                {% endif %}
                             </div>
                         </div>
                     </div>

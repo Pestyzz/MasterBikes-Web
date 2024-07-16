@@ -1,5 +1,5 @@
 from django.shortcuts import get_object_or_404, redirect, render
-from tienda.forms import CustomUserCreationForm, CartAddProductForm
+from tienda.forms import CustomUserCreationForm, CartAddProductForm, EstadoPedidoForm
 from tienda.models import Cart, CartItem, Producto
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
@@ -23,7 +23,7 @@ def home(request):
     if request.user.is_authenticated:
         cart, created = Cart.objects.get_or_create(user=request.user)
         cart_items = CartItem.objects.filter(cart=cart).select_related('producto')
-        cart_item_count = sum(item.quantity for item in cart_items)  # Sumar la cantidad de cada producto
+        cart_item_count = sum(item.quantity for item in cart_items)
         items = cart_items
         total = sum(item.producto.precio * item.quantity for item in items)
     else:
@@ -82,8 +82,6 @@ def pedidos(request):
     
     return render(request, "pedidos.html",  {'pedidos': pedidos})
 
-
-from tienda.forms import EstadoPedidoForm
 def detallepedido(request, pedido_id):
     pedido = get_object_or_404(Pedido, id=pedido_id)
     detalle_pedido = PedidoItem.objects.filter(pedido_id = pedido_id)
@@ -100,7 +98,7 @@ def detallepedido(request, pedido_id):
         form = None
 
     return render(request, 'detallepedido.html', {'pedido': pedido, 'productos': detalle_pedido, 'form': form})
-# CARRITO
+
 def cartDetail(request):
     cart, created = Cart.objects.get_or_create(user=request.user)
     items = CartItem.objects.filter(cart=cart).select_related('producto')
