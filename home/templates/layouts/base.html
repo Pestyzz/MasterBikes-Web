@@ -92,9 +92,10 @@
             <h5 class="offcanvas-title">Carro</h5>
             <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
-        <div class="offcanvas-body">
+        <div class="offcanvas-body d-flex flex-column">
+            <h4>Productos</h4>
             {% if items %}
-            <ul class="list-unstyled" id="cart-items-list">
+            <ul class="list-unstyled flex-grow-1" id="cart-items-list">
                 {% for item in items %}
                 <li id="cart-item-{{ item.id }}" class="mb-3">
                     <div class="card bg-body-tertiary">
@@ -125,6 +126,7 @@
                 {% endfor %}
             </ul>
             <div class="w-100">
+                <h4>Total: {{total|currency_format}}</h4>
                 <a href="{% url 'cartDetail' %}" class="btn btn-green text-dark w-100">Ir a pagar</a>
             </div>
             {% else %}

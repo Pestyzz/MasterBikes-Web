@@ -83,6 +83,7 @@ def pedidos(request):
     
     return render(request, "pedidos.html",  {'pedidos': pedidos})
 
+@login_required
 def detallepedido(request, pedido_id):
     pedido = get_object_or_404(Pedido, id=pedido_id)
     detalle_pedido = PedidoItem.objects.filter(pedido_id = pedido_id)
