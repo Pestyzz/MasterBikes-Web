@@ -1,0 +1,65 @@
+@import "../../../node_modules/bootstrap/scss/bootstrap.scss";
+@import "../../../node_modules/bootstrap/dist/bootswatch";
+@import "../../../node_modules/bootstrap/dist/variables";
+
+.fas.border {
+    border-radius: 50%;
+}
+
+.fas.complete {
+    background-color: $green2;
+}
+
+.fas.incomplete {
+    background-color: #6c757d;
+}
+
+.fas.incomplete-red {
+    background-color: $danger;
+}
+
+.bar {
+    width: 100px;
+    height: 5px;
+    background-color: #6c757d;
+    margin-left: 0;
+    margin-right: 0; 
+    transition: background-color 0.5s, width 0.5s;
+}
+
+.bar.fill {
+    background-color: $green2;
+}
+
+.bar.fill-red {
+    background-color: $danger;
+}
+
+.spacing-left {
+    margin-left: 75px;
+}
+ 
+.spacing-right {
+    margin-right: 75px;
+}
+ 
+.small {
+     font-size: 0.7rem;
+}
+ 
+th.table-col {
+    border-right: 1px solid #6c757d;
+}
+
+th {
+    color: $dark !important;
+}
+
+input.form-control.sale {
+    width: 20%;
+    display: inline;
+}
+
+select.form-control {
+    background-color: $dark !important;
+}

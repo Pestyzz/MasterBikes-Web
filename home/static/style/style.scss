@@ -6,6 +6,7 @@
 @import "../style/product.scss";
 @import "../style/login.scss";
 @import "../style/cart.scss";
+@import "../style/detallepedido.scss";
 
 body {
     padding-top: 56px;
@@ -136,18 +137,18 @@ a.show-more {
     }
 }
 
-button,
+button.btn-green,
 a.btn-green {
     background-color: $green2;
     border: none;
 }
 
-button:hover,
+button.btn-green:hover,
 a.btn-green:hover {
     background-color: #788d2a;
 }
 
-button:active,
+button.btn-green:active,
 a.btn-green:active {
     background-color: #4c5a1a !important;
 }

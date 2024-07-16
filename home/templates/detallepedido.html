@@ -1,143 +1,110 @@
 {% extends "layouts/base.html" %}
 {% block title %}<title>Pedido#{{pedido.id}}</title>{% endblock title %}
-
 {% load static %}
-{% block scripts %}
-<script src="{% static "js/cardSlider.js" %}"></script>
-{% endblock scripts %}
-
 {% load custom_filters %}
 {% block content %}
-<h1 class="page-title">Detalle del Pedido #{{ pedido.id }}</h1>
-    <div class="product-details-header">
-        <p><strong>Fecha de Pedido:</strong> {{ pedido.fecha_pedido }}</p>
-        <p><strong>Total:</strong> {{ pedido.total }}</p>
-        <p><strong>Estado:</strong> {{ pedido.estado }}</p>
+<main class="container d-flex flex-column justify-content-center align-items-center mt-4">
+    <div class="container col-10 mb-5 bg-dark shadow border rounded-4">
+        <div class="d-flex justify-content-center align-items-center flex-column mt-2 mb-2">
+            <h3 class="my-2 text-white">¡Sigue tu pedido!</h3>
+            <div class="mb-3 w-100 d-flex flex-column align-items-center">
+                <div class="row mt-2 mb-3 w-100">
+                    <div class="d-flex flex-row align-items-center justify-content-center">
+                        <i
+                            class="fas {{ estados.icon_class }} p-2 border border-0 {{ estados.first_class }} text-white"></i>
+                        <div class="bar {{ estados.first_bar }}"></div>
+                        <i
+                            class="fas {{ estados.icon_class }} p-2 border border-0 {{ estados.second_class }} text-white"></i>
+                        <div class="bar {{ estados.second_bar }}"></div>
+                        <i
+                            class="fas {{ estados.icon_class }} p-2 border border-0 {{ estados.third_class }} text-white"></i>
+                    </div>
+                </div>
+                <div class="row d-flex justify-content-center w-50 mb-5">
+                    <div class="d-flex flex-row align-items-center justify-content-between">
+                        <div class="d-flex flex-column justify-content-end align-items-center spacing-left">
+                            <p class="small">Pedido Confirmado</p>
+                            <i class="fas fa-bag-shopping fa-xl"></i>
+                        </div>
+                        <div class="d-flex flex-column justify-content-end align-items-center">
+                            <p class="small">Pedido Enviado</p>
+                            <i class="fas fa-truck fa-xl"></i>
+                        </div>
+                        <div class="d-flex flex-column justify-content-end align-items-center spacing-right">
+                            <p class="small">Pedido Recibido</p>
+                            <i class="fas fa-home fa-xl"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="row d-flex justify-content-center">
+                    <div class="d-flex flex-row justify-content-center gap-4 text-center">
+                        <div>
+                            <h5>Fecha del pedido: {{pedido.fecha_pedido}}</h5>
+                            <p class="small">Si surge alguna consulta, no dude en contactarnos en
+                                <strong>masterbikes@corp.cl</strong></p>
+                            {% if pedido.estado == 'cancelado' %}
+                            <h5>Estado: CANCELADO</h5>
+                            {% elif pedido.estado == 'devuelto' %}
+                            <h5>Estado: DEVUELTO</h5>
+                            {% elif pedido.estado == 'rechazado' %}
+                            <h5>Estado: RECHAZADO</h5>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    
-    <ul class="list-unstyled" id="cart-items-list">
-        {% for item in productos %}
-            <li id="cart-item-{{ item.id }}" class="mb-3">
-                <div class="card bg-body-tertiary">
-                    <div class="img-wrapper">
-                        <a href="{% url 'product' item.producto.id %}">
-                            <img src="{{item.producto.imagen.url}}" class="w-100" alt="product-image">
-                        </a>
-                    </div>
-                    <div class="card-body text-body">
-                        <p class="card-title">{{item.producto.marca.nombre}}</p>
-                        <h5 class="card-text">{{item.producto.nombre}}</h5>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <h5 class="m-0">{{item.producto.precio}}</h5>
-                            <h5 class="m-0">Cantidad: {{item.cantidad}}</h5>
-                        </div>
-                    </div>
-                </div>
-            </li>
-        {% endfor %}
-    </ul>
-
+    <div class="container col-10 p-0 bg-dark border rounded-4 mb-5">
+        <div class="border-bottom border-2 mx-3 my-3 mb-0">
+            <h4 class="text-white"><i class="fas fa-box me-2"></i>Tu Pedido:</h4>
+        </div>
+        <div class="px-3">
+            <h6 class="text-white my-2">Detalle Pedido #{{pedido.id}}</h6>
+            <div class="table-responsive">
+                <table class="table table-dark table-striped table-bordered">
+                    <thead>
+                        <tr class="text-center">
+                            <th scope="col" class="text-white">Cantidad</th>
+                            <th scope="col" class="text-white">Nombre Producto</th>
+                            <th scope="col" class="text-white">Tipo/Servicio</th>
+                            <th scope="col" class="text-white">Precio Unitario</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in productos %}
+                        <tr class="text-center">
+                            <td class="fw-medium text-white">{{ item.cantidad }}</td>
+                            <td class="fw-medium text-white">{{ item.producto.nombre }}</td>
+                            <td class="fw-medium text-white">
+                                {% if item.producto.bicicleta %}
+                                Bicicleta
+                                {% elif item.producto.accesorio %}
+                                Accesorio
+                                {% else %}
+                                Servicio
+                                {% endif %}
+                            </td>
+                            <td class="fw-medium text-white">{{item.producto.precio|currency_format}}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="text-end  m-3">
+            <h4 class="text-white">Total: {{pedido.total|currency_format}}</h4>
+        </div>
+    </div>
     {% if form %}
-        <form method="post" class="form">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit" class="btn btn-primary">Guardar Cambios</button>
-        </form>
+    <form method="post" class="form d-flex gap-2">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <div class="d-flex align-items-center gap-2">
+            <button type="submit" class="btn btn-green text-dark">Guardar Cambios</button>
+            <a href="{% url "pedidos" %}" class="btn btn-green text-dark">Volver</a>
+        </div>
+    </form>
     {% endif %}
-
-    <main class="container d-flex flex-column justify-content-center align-content-center">
-        <div class="container col-10 mb-5 bg-white shadow border rounded-4">
-            <div class="d-flex justify-content-center align-items-center flex-column mt-2 mb-2 ">
-                <h3 class="my-2 text-dark">¡Sigue tu pedido!</h3>
-                <div class="mb-3 w-100 d-flex flex-column align-items-center">
-                    <div class="row mt-2 mb-3">
-                        <div class="d-flex flex-row align-items-center">
-                            <i class="fas fa-check p-2 border border-0 complete text-white"></i>
-                            <div class="bar fill"></div>
-                            <i class="fas fa-check p-2 border border-0 complete text-white"></i>
-                            <div class="bar"></div>
-                            <i class="fas fa-check p-2 border border-0 incomplete text-white"></i>
-                            <div class="bar"></div>
-                            <i class="fas fa-check p-2 border border-0 incomplete text-white"></i>
-                        </div>
-                    </div>
-                    <div class="row d-flex justify-content-center w-100 mb-5">
-                        <div class="d-flex flex-row align-items-center justify-content-center espaciado">
-                            <div class="d-flex flex-column justify-content-center align-items-center">
-                                <p class="chico">Pedido Confirmado</p>
-                                <i class="fas fa-bag-shopping fa-xl"></i>
-                            </div>
-                            <div class="d-flex flex-column justify-content-center align-items-center">
-                                <p class="chico">Pedido Enviado</p>
-                                <i class="fas fa-box fa-xl"></i>
-                            </div>
-                            <div class="d-flex flex-column justify-content-center align-items-center">
-                                <p class="chico">Pedido En Camino</p>
-                                <i class="fas fa-truck fa-xl"></i>
-                            </div>
-                            <div class="d-flex flex-column justify-content-center align-items-center">
-                                <p class="chico">Pedido Recibido</p>
-                                <i class="fas fa-home fa-xl"></i>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row d-flex justify-content-center">
-                        <div class="d-flex flex-row justify-content-center gap-4">
-                            <div class="text-center">
-                                <h5>Fecha de llegada: 20/05</h5>
-                                <h6>Dirección: Chiguayante, Villa pie de monte, Calle 1, Casa 2313</h6>
-                                <p class="small">Si surge alguna consulta, no dude en contactarnos en <strong>masterbikes@corp.cl</strong></p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="container card col-10 p-0 bg-white border rounded-4 mb-5">
-            <div class="card-title border-bottom border-2 mx-3 my-3 mb-0">
-                <h4 class="text-dark "><i class="fas fa-box me-2"></i>Tu Pedido:</h4>
-            </div>
-            <div class="card-body">
-                <h6>Pedido#9123</h6>
-                <div>
-                    <table class="table border">
-                        <thead>
-                            <tr class="text-center">
-                                <th scope="col" class="table-col">Cantidad</th>
-                                <th scope="col" class="table-col">Nombre Producto</th>
-                                <th scope="col" class="table-col">Tipo/Servicio</th>
-                                <th scope="col">Precio Unitario</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr class="text-center">
-                                <th scope="row" class="table-col fw-medium">1</th>
-                                <th class="table-col fw-medium">Bicicleta Infantil</th>
-                                <th class="table-col fw-medium">Arriendo</th>
-                                <th class="fw-medium">$75.000</th>
-                            </tr>
-                            <tr class="text-center">
-                                <th scope="row" class="table-col fw-medium">1</th>
-                                <th class="table-col fw-medium">Centrado de Rueda</th>
-                                <th class="table-col fw-medium">Reparación</th>
-                                <th class="fw-medium">$30.000</th>
-                            </tr>
-                            <tr class="text-center">
-                                <th scope="row" class="table-col fw-medium">1</th>
-                                <th class="table-col fw-medium">Kit Luces LED ST110</th>
-                                <th class="table-col fw-medium">Accesorio</th>
-                                <th class="fw-medium">$20.000</th>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div class="text-end">
-                    <p class="h5">Subtotal: $125.000 CLP</p>
-                    <p class="h5">Envío: $7.500 CLP</p>
-                    <p class="h4 text-primary">Total: $132.500 CLP</p>
-                </div>
-            </div>
-        </div>
-    </main>
-    
+</main>
 {% endblock content %}
