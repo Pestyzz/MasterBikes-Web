@@ -14,9 +14,8 @@ def product_list():
     return Producto.objects.all()
 
 def home(request):
-    
-    return render(request, "index.html")
-
+    lista_productos = product_list()
+    return render(request, "index.html", {'products':lista_productos})
 
 def finder(request, category=None):
     products = None
