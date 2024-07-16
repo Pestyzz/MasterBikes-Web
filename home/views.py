@@ -14,17 +14,23 @@ def product_list():
     return Producto.objects.all()
 
 def home(request):
-    
-    return render(request, "index.html")
-
+    lista_productos = product_list()
+    return render(request, "index.html", {'products':lista_productos})
 
 def finder(request, category=None):
     products = None
-
+    
     if request.method == "GET":
         searchQuery = request.GET.get("search", "")
         
-        products = Producto.objects.all()
+        if category == "Bicicletas":
+            products = Producto.objects.filter(bicicleta__isnull=False, nombre__icontains=searchQuery, stock__gt=0)
+        elif category == "Accesorios":
+            products = Producto.objects.filter(accesorio__isnull=False, nombre__icontains=searchQuery, stock__gt=0)
+        elif category == "Servicios":
+            products = Producto.objects.filter(servicio__isnull=False, nombre__icontains=searchQuery, stock__gt=0)
+        else:
+            products = Producto.objects.filter(nombre__icontains=searchQuery, stock__gt=0) or Producto.objects.filter(marca__nombre__icontains=searchQuery, stock__gt=0)
         
         data = {
             "searchQ": searchQuery,
@@ -58,9 +64,21 @@ def pedidos(request):
     
     return render(request, "pedidos.html",  {'pedidos': pedidos})
 
+@login_required
 def detallepedido(request, pedido_id):
     pedido = get_object_or_404(Pedido, id=pedido_id)
     detalle_pedido = PedidoItem.objects.filter(pedido_id = pedido_id)
+    
+    estados_completados = ['en preparacion', 'enviado', 'entregado']
+    estados_no_completados = ['devuelto', 'rechazado', 'cancelado']
+    estados = {
+        'first_class': 'complete' if pedido.estado in estados_completados else ('incomplete-red' if pedido.estado in estados_no_completados else 'incomplete'),
+        'first_bar': 'fill' if pedido.estado in estados_completados else ('fill-red' if pedido.estado in estados_no_completados else ''),
+        'second_class': 'complete' if pedido.estado in estados_completados[1:] else ('incomplete-red' if pedido.estado in estados_no_completados else 'incomplete'),
+        'second_bar': 'fill' if pedido.estado in estados_completados[1:] else ('fill-red' if pedido.estado in estados_no_completados else ''),
+        'third_class': 'complete' if pedido.estado == 'entregado' else ('incomplete-red' if pedido.estado in estados_no_completados else 'incomplete'),
+        'icon_class': 'fa-check' if pedido.estado not in estados_no_completados else 'fa-xmark'
+    }
     
     if request.user.is_staff:
         if request.method == 'POST':
@@ -73,7 +91,7 @@ def detallepedido(request, pedido_id):
     else:
         form = None
 
-    return render(request, 'detallepedido.html', {'pedido': pedido, 'productos': detalle_pedido, 'form': form})
+    return render(request, 'detallepedido.html', {'pedido': pedido, 'productos': detalle_pedido, 'form': form, 'estados': estados})
 
 def cartDetail(request):
     cart, created = Cart.objects.get_or_create(user=request.user)
