@@ -1,0 +1,62 @@
+{% extends "layouts/base.html" %}
+{% block title %}<title>Pago</title>{% endblock title %}
+{% load static %}
+{% block scripts %}
+<script src="{% static "js/detail.js" %}"></script>
+{% endblock scripts %}
+
+
+
+
+{% load custom_filters %}
+{% block content %}
+<main class="container-fluid d-flex h-100 p-0">
+    <div class="col-6 p-3 bg-dark d-flex flex-column">
+        <form action="{% url 'cartDetail' %}" method="post" class="form-pago">
+            {% csrf_token %}
+            <div class="form-group mb-2">
+                <label for="card_number">Número de Tarjeta:</label>
+                <input class="form-control" type="text" id="card_number" name="card_number" pattern="\d{16}" title="Debe tener 16 dígitos" maxlength="16" required>
+            </div>
+            <div class="form-group mb-2">
+                <label for="expiry_date">Fecha de Expiración:</label>
+                <input class="form-control" type="text" id="expiry_date" name="expiry_date" placeholder="MM/YY" pattern="(0[1-9]|1[0-2])\/\d{2}" title="Debe tener el formato MM/YY" maxlength="5" required>
+            </div>
+            <div class="form-group mb-3">
+                <label for="cvv">CVV:</label>
+                <input class="form-control" type="password" id="cvv" name="cvv" pattern="\d{3}" title="Debe tener 3 dígitos" maxlength="3" required>
+            </div>
+            <div class="mt-auto d-flex gap-2">
+                <button type="submit" class="btn btn-green text-dark w-100"><h5 class="fw-normal">Pagar</h5></button>
+                <a href="{% url 'home' %}" class="btn btn-green text-dark w-100"><h5 class="fw-normal">Cancelar</h5></a>
+            </div>
+        </form>
+    </div>
+    <div class="col-6 border-start overflow-auto">
+        <div class="ms-3 p-3">
+            <h3>Productos</h3>
+            <div class="row">
+                {% for item in items %}
+                    <div class="col-lg-6 mb-3">
+                        <div class="card bg-body-tertiary">
+                            <div class="img-wrapper">
+                                <a href="{% url 'product' item.producto.id %}">
+                                    <img src="{{ item.producto.imagen.url }}" class="w-100" alt="product-image">
+                                </a>
+                            </div>
+                            <div class="card-body text-body">
+                                <p class="card-title">{{ item.producto.marca.nombre }}</p>
+                                <h5 class="card-text">{{ item.producto.nombre }}</h5>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h5 class="m-0">{{ item.producto.precio }}</h5>
+                                    <h5 class="m-0">Cantidad: {{ item.quantity }}</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock content %}

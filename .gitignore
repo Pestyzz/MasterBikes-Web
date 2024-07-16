@@ -3,5 +3,3 @@ __pycache__
 __pycache__/
 venv
 /entorno
-tienda/migrations/0003_rename_product_pedidoitem_producto.py
-tienda/migrations/0002_rename_product_pedidoitem_producto.py
