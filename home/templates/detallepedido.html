@@ -13,7 +13,7 @@
 <h1 class="page-title">Detalle del Pedido #{{ pedido.id }}</h1>
     <div class="product-details-header">
         <p><strong>Fecha de Pedido:</strong> {{ pedido.fecha_pedido }}</p>
-        <p><strong>Total:</strong> {{ pedido.total }}</p>
+        <p><strong>Total:</strong> {{ pedido.total|currency_format }}</p>
         <p><strong>Estado:</strong> {{ pedido.estado }}</p>
     </div>
     
@@ -30,7 +30,7 @@
                         <p class="card-title">{{item.producto.marca.nombre}}</p>
                         <h5 class="card-text">{{item.producto.nombre}}</h5>
                         <div class="d-flex justify-content-between align-items-center">
-                            <h5 class="m-0">{{item.producto.precio}}</h5>
+                            <h5 class="m-0">{{item.producto.precio|currency_format}}</h5>
                             <h5 class="m-0">Cantidad: {{item.cantidad}}</h5>
                         </div>
                     </div>
