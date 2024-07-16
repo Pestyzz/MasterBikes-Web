@@ -133,7 +133,7 @@ def cartDetail(request):
             cart.delete()
             messages.success(request, 'Pedido realizado, espere actualizaciones de estado.')
         return redirect('pedidos')
-    return render(request, 'cart/detail.html', {'cart': cart, 'items': items, 'total': total})
+    return render(request, 'payment.html', {'cart': cart, 'items': items, 'total': total})
 
 @login_required
 def cartAdd(request, product_id):
