@@ -1,5 +1,4 @@
 from django.db import models
-import uuid
 import datetime
 from django.contrib.auth.models import AbstractBaseUser, User, UserManager, PermissionsMixin
 from PIL import Image
@@ -83,7 +82,7 @@ class Bicicleta(models.Model):
         "ENDURO": "ENDURO",
         "DOWNHILL": "DOWNHILL",}
 
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    id = models.AutoField(primary_key=True, unique=True, editable=False)
     nombre = models.CharField(max_length=100)
     tamanioaro = models.IntegerField(default=26)
     suspension = models.CharField(default='DELANTERA', max_length=9, choices=SUSPENSION)
@@ -97,7 +96,7 @@ class Bicicleta(models.Model):
 
 class Servicio(models.Model):
 
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    id = models.AutoField(primary_key=True, unique=True, editable=False)
     nombre = models.CharField(max_length=100)
 
     def __str__(self):
@@ -117,7 +116,7 @@ class Accesorio(models.Model):
         "PORTA BICICLETAS": "PORTA BICICLETAS",
         "OTROS": "OTROS",}
 
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    id = models.AutoField(primary_key=True, unique=True, editable=False)
     nombre = models.CharField(max_length=100)
     tipoaccesorio = models.CharField(default='BICICLETA',max_length=100,choices=TIPO)
     
@@ -128,7 +127,7 @@ class Accesorio(models.Model):
 
 class Marca(models.Model):
 
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    id = models.AutoField(primary_key=True, unique=True, editable=False)
     nombre = models.CharField(max_length=100)
 
     def __str__(self):
@@ -137,7 +136,7 @@ class Marca(models.Model):
 
 class Producto(models.Model):
 
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    id = models.AutoField(primary_key=True, unique=True, editable=False)
     nombre = models.CharField(max_length=100)
     descripcion = models.TextField()
     bicicleta = models.ForeignKey(Bicicleta, on_delete=models.SET_NULL, null=True, blank=True)
@@ -162,7 +161,7 @@ class Producto(models.Model):
 
 class Boleta(models.Model):
 
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    id = models.AutoField(primary_key=True, unique=True, editable=False)
     cliente = models.ForeignKey(User, on_delete=models.CASCADE)
     fecha_creacion = models.DateTimeField(auto_now_add=True)
     estado = models.BooleanField(default=False)
@@ -190,7 +189,7 @@ class Delivery(models.Model):
         "R": "RECIBIDO",
     }
 
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    id = models.AutoField(primary_key=True, unique=True, editable=False)
     boleta = models.OneToOneField(Boleta, on_delete=models.CASCADE, null=True, blank=True)
     comentarios = models.TextField(max_length=100, null=True, blank=True)
     direccion = models.CharField(max_length=100, null=True, blank=True)
@@ -231,17 +230,45 @@ class Pago(models.Model):
 User = get_user_model()
 
 class Cart(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    id = models.AutoField(primary_key=True, unique=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f'Cart {self.id} for {self.user.email}'
+        return f'Cart {self.id} for {self.user.correo}'
 
 class CartItem(models.Model):
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
     product = models.ForeignKey(Producto, on_delete=models.CASCADE)
-    quantity = models.PositiveIntegerField(default=1)
+    quantity = models.PositiveIntegerField(default=0)
 
     def __str__(self):
-        return f'{self.quantity} of {self.product.nombre}'
+        return f'cantidad: {self.quantity} de id: {self.producto.id} modelo:{self.producto.modelo}'
+
+
+TIPO_ESTADO_PEDIDO = [
+    ('sin confirmar', 'SIN CONFIRMAR'),
+    ('en preparacion', 'EN PREPARACION'),
+    ('enviado', 'ENVIADO'),
+    ('entregado', 'ENTREGADO'),
+    ('devuelto', 'DEVUELTO'),
+    ('rechazado', 'RECHAZADO'),
+    ('cancelado', 'CANCELADO')
+]
+
+class Pedido(models.Model):
+    user = models.ForeignKey(User, on_delete=models.PROTECT, related_name='pedidos')
+    total = models.DecimalField(max_digits=50, decimal_places=2)
+    estado = models.CharField(max_length=20, choices=TIPO_ESTADO_PEDIDO, default='pendiente')
+    fecha_pedido = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'Pedido {self.pk} - Usuario: {self.user.email}'
+
+class PedidoItem(models.Model):
+    pedido = models.ForeignKey(Pedido, related_name='items', on_delete=models.PROTECT)
+    product = models.ForeignKey('Producto', on_delete=models.PROTECT)
+    cantidad = models.PositiveIntegerField(default=1)
+
+    def __str__(self):
+        return f'Pedido {self.pedido.pk} - Producto: {self.producto.nombre}'
