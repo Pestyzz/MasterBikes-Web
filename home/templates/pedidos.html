@@ -1,0 +1,28 @@
+{% extends "layouts/base.html" %}
+{% block title %}<title>MasterBikes Inicio</title>{% endblock title %}
+
+{% load static %}
+{% block scripts %}
+<script src="{% static "js/cardSlider.js" %}"></script>
+{% endblock scripts %}
+
+{% load custom_filters %}
+{% block content %}
+
+{% for pedido in pedidos %}
+    <li class="order-item">
+        <div class="order-header">
+            <strong>Número de Pedido:</strong> {{ pedido.pk }}
+        </div>
+        <div class="order-details">
+            <strong>Fecha:</strong> {{ pedido.fecha_pedido }}<br>
+            <strong>Total:</strong> {{ pedido.total }}<br>
+            <strong>Estado:</strong> {{ pedido.estado }}<br>
+        </div>
+        <a href="{% url 'detallepedido' pedido.id %}" class="order-link">Ver Detalles</a> <!-- Enlace opcional para ver detalles del pedido -->
+    </li>
+    {% empty %}
+    <li class="order-item">No tienes pedidos realizados.</li>
+    {% endfor %}
+    
+{% endblock content %}

@@ -239,24 +239,24 @@ class Cart(models.Model):
 
 class CartItem(models.Model):
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
-    product = models.ForeignKey(Producto, on_delete=models.CASCADE)
+    producto = models.ForeignKey(Producto, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(default=0)
 
     def __str__(self):
-        return f'cantidad: {self.quantity} de id: {self.producto.id} modelo:{self.producto.modelo}'
+        return f'cantidad: {self.quantity} de id: {self.producto.id} modelo:{self.producto.nombre}'
 
-
-TIPO_ESTADO_PEDIDO = [
-    ('sin confirmar', 'SIN CONFIRMAR'),
-    ('en preparacion', 'EN PREPARACION'),
-    ('enviado', 'ENVIADO'),
-    ('entregado', 'ENTREGADO'),
-    ('devuelto', 'DEVUELTO'),
-    ('rechazado', 'RECHAZADO'),
-    ('cancelado', 'CANCELADO')
-]
 
 class Pedido(models.Model):
+    TIPO_ESTADO_PEDIDO = [
+        ('sin confirmar', 'SIN CONFIRMAR'),
+        ('en preparacion', 'EN PREPARACION'),
+        ('enviado', 'ENVIADO'),
+        ('entregado', 'ENTREGADO'),
+        ('devuelto', 'DEVUELTO'),
+        ('rechazado', 'RECHAZADO'),
+        ('cancelado', 'CANCELADO')
+    ]
+
     user = models.ForeignKey(User, on_delete=models.PROTECT, related_name='pedidos')
     total = models.DecimalField(max_digits=50, decimal_places=2)
     estado = models.CharField(max_length=20, choices=TIPO_ESTADO_PEDIDO, default='pendiente')
@@ -267,7 +267,7 @@ class Pedido(models.Model):
 
 class PedidoItem(models.Model):
     pedido = models.ForeignKey(Pedido, related_name='items', on_delete=models.PROTECT)
-    product = models.ForeignKey('Producto', on_delete=models.PROTECT)
+    producto = models.ForeignKey('Producto', on_delete=models.PROTECT)
     cantidad = models.PositiveIntegerField(default=1)
 
     def __str__(self):
