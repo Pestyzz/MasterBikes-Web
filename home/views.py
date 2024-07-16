@@ -55,6 +55,7 @@ def register(request):
         form = CustomUserCreationForm()
     return render(request, 'registration/register.html', {'form': form})
 
+@login_required
 def cartAdd(request, product_id):
     product = get_object_or_404(Producto, id=product_id)
     cart, created = Cart.objects.get_or_create(user=request.user)
@@ -73,7 +74,7 @@ def cartAdd(request, product_id):
     cart_item.save()
     return redirect('home')
 
-
+@login_required
 def cartRemove(request, item_id):
     cart_item = get_object_or_404(CartItem, id=item_id, cart__user=request.user)
     if cart_item.quantity > 1:
@@ -83,6 +84,7 @@ def cartRemove(request, item_id):
         cart_item.delete()
     return redirect('home')
 
+@login_required
 def cartDetail(request):
     cart, created = Cart.objects.get_or_create(user=request.user)
     cart_items = CartItem.objects.filter(cart=cart)
