@@ -258,7 +258,7 @@ class Pedido(models.Model):
     ]
 
     user = models.ForeignKey(User, on_delete=models.PROTECT, related_name='pedidos')
-    total = models.DecimalField(max_digits=50, decimal_places=2)
+    total = models.IntegerField()
     estado = models.CharField(max_length=20, choices=TIPO_ESTADO_PEDIDO, default='pendiente')
     fecha_pedido = models.DateTimeField(auto_now_add=True)
 
